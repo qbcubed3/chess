@@ -1,5 +1,8 @@
 package chess;
 
+import static chess.ChessGame.TeamColor;
+import static chess.ChessPiece.PieceType;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -7,9 +10,10 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessBoard {
+    static ChessPiece[][] pieces;
 
     public ChessBoard() {
-        
+        pieces = new ChessPiece[8][8];
     }
 
     /**
@@ -19,7 +23,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        ChessBoard.
+        ChessBoard.pieces[position.getRow()][position.getColumn()] = piece;
     }
 
     /**
@@ -30,7 +34,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        return ChessBoard.pieces[position.getRow()][position.getColumn()];
     }
 
     /**
@@ -38,6 +42,47 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        ChessBoard.pieces = new ChessPiece[8][8];
+        //places all the starting pieces in the correct spots for chess
+        for (int row = 0; row < 8; row++){
+            for (int col = 0; col < 8; col++){
+                if (row == 1) {
+                    pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.PAWN);
+                }
+                if (row == 6) {
+                    pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.PAWN);
+                }
+                if (row == 0){
+                    if (col == 0 || col == 7){
+                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.ROOK);
+                    }
+                    else if (col == 1 || col == 6) {
+                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT);
+                    }
+                    else if (col == 2 || col == 5) {
+                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.BISHOP);
+                    }
+                    else if (col == 3) {
+                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.QUEEN);
+                    }
+                    else {
+                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.QUEEN);
+                    }
+                }
+                if (row == 7) {
+                    if (col == 0 || col == 7) {
+                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.ROOK);
+                    } else if (col == 1 || col == 6) {
+                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT);
+                    } else if (col == 2 || col == 5) {
+                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.BISHOP);
+                    } else if (col == 3) {
+                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.QUEEN);
+                    } else {
+                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.QUEEN);
+                    }
+                }
+            }
+        };
     }
 }
