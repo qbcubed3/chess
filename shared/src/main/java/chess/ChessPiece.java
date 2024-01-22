@@ -71,7 +71,9 @@ public class ChessPiece {
         if (board.getPiece(myPosition).pieceType == pieceType.BISHOP){
             BishopCalculator calc = new BishopCalculator();
         }
-
+        if (board.getPiece(myPosition).pieceType == pieceType.KING){
+            KingCalculator calc = new KingCalculator();
+        }
         MoveCalculator calc = new PawnCalculator();
         return calc.pieceMoves(board, myPosition);
     }

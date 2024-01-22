@@ -24,7 +24,7 @@ public class PawnCalculator implements MoveCalculator{
                     moveCollection.add(new ChessMove(position, new ChessPosition(row + 2, column), null));
                 }
             }
-            //capturing pieces
+            //captures a piece
             if (board.getPiece(new ChessPosition(row + 1, column + 1)) != null){
                 if (board.getPiece(new ChessPosition(row + 1, column + 1)).getTeamColor() == chess.ChessGame.TeamColor.BLACK){
                     moveCollection.add(new ChessMove(position, new ChessPosition(row + 1, column + 1), null));
