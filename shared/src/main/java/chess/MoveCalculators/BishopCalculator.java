@@ -16,16 +16,71 @@ public class BishopCalculator implements MoveCalculator {
         Collection<ChessMove> moveCollection = new ArrayList<ChessMove>();
         int row = position.getRow() + 1;
         int column = position.getColumn() + 1;
-        for (int i = row; i < 8; i++){
-            if(column > 7) {
+        System.out.println("row: " + row + "col: " + column);
+        //looks for moves in the upper right path
+        for (int i = row; i < 9; i++){
+            if(column > 8) {
                 break;
             }
-            else if(board.getPiece(new ChessPosition(row, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(row, column), ChessPiece.PieceType.BISHOP));
+            else if(board.getPiece(new ChessPosition(i, column)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+            }
+            else {
+                break;
             }
             column += 1;
         }
 
+        //looks for moves in the upper left path
+        column = position.getColumn() - 1;
+        for (int i = row; i < 9; i++){
+            if(column < 1) {
+                break;
+            }
+            else if(board.getPiece(new ChessPosition(i, column)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+            }
+            else {
+                break;
+            }
+            column -= 1;
+        }
+
+        //looks for moves in the lower right section
+        column = position.getColumn() - 1;
+        row -= 2;
+        for (int i = row; i > 0; i--){
+            if(column < 1) {
+                break;
+            }
+            else if(board.getPiece(new ChessPosition(i, column)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+            }
+            else {
+                break;
+            }
+            column -= 1;
+        }
+
+        //looks for moves in the lower left section
+        column = position.getColumn() + 1;
+        for (int i = row; i > 0; i--){
+            if(column > 8) {
+                break;
+            }
+            else if(board.getPiece(new ChessPosition(i, column)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+            }
+            else {
+                break;
+            }
+            column += 1;
+        }
+
+        for (ChessMove move: moveCollection){
+            System.out.println(move.getEndPosition().getRow());
+            System.out.print(move.getEndPosition().getColumn());
+        }
         return moveCollection;
     }
 }

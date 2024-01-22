@@ -13,7 +13,7 @@ public class ChessBoard {
     static ChessPiece[][] pieces;
 
     public ChessBoard() {
-        pieces = new ChessPiece[8][8];
+        pieces = new ChessPiece[9][9];
     }
 
     /**
