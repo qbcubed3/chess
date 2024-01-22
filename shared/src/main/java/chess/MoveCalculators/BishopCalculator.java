@@ -23,7 +23,6 @@ public class BishopCalculator implements MoveCalculator {
             else if(board.getPiece(new ChessPosition(row, column)) == null) {
                 moveCollection.add(new ChessMove(position, new ChessPosition(row, column), ChessPiece.PieceType.BISHOP));
             }
-
             column += 1;
         }
 
