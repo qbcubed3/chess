@@ -23,7 +23,11 @@ public class BishopCalculator implements MoveCalculator {
                 break;
             }
             else if(board.getPiece(new ChessPosition(i, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+            }
+            else if(board.getPiece(new ChessPosition(i, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+                break;
             }
             else {
                 break;
@@ -38,7 +42,11 @@ public class BishopCalculator implements MoveCalculator {
                 break;
             }
             else if(board.getPiece(new ChessPosition(i, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+            }
+            else if(board.getPiece(new ChessPosition(i, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+                break;
             }
             else {
                 break;
@@ -54,7 +62,11 @@ public class BishopCalculator implements MoveCalculator {
                 break;
             }
             else if(board.getPiece(new ChessPosition(i, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+            }
+            else if(board.getPiece(new ChessPosition(i, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+                break;
             }
             else {
                 break;
@@ -69,7 +81,11 @@ public class BishopCalculator implements MoveCalculator {
                 break;
             }
             else if(board.getPiece(new ChessPosition(i, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), ChessPiece.PieceType.BISHOP));
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+            }
+            else if(board.getPiece(new ChessPosition(i, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+                break;
             }
             else {
                 break;
@@ -78,8 +94,7 @@ public class BishopCalculator implements MoveCalculator {
         }
 
         for (ChessMove move: moveCollection){
-            System.out.println(move.getEndPosition().getRow());
-            System.out.print(move.getEndPosition().getColumn());
+            System.out.println(move);
         }
         return moveCollection;
     }
