@@ -20,12 +20,13 @@ public class BishopCalculator implements MoveCalculator {
             if(column > 7) {
                 break;
             }
-            else if(board.getPiece(new ChessPosition(row, column))){
-
+            else if(board.getPiece(new ChessPosition(row, column)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(row, column), ChessPiece.PieceType.BISHOP));
             }
-            moveCollection.add(new ChessMove(position, new ChessPosition(row, column), ChessPiece.PieceType.BISHOP));
 
-
+            column += 1;
         }
+
+        return moveCollection;
     }
 }
