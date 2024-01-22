@@ -70,8 +70,9 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         if (board.getPiece(myPosition).pieceType == pieceType.BISHOP){
             BishopCalculator calc = new BishopCalculator();
-            return calc.pieceMoves(board, myPosition);
         }
-        return null;
+
+        MoveCalculator calc = new PawnCalculator();
+        return calc.pieceMoves(board, myPosition);
     }
 }

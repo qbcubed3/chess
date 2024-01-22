@@ -3,7 +3,6 @@ package chess.MoveCalculators;
 import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
-import chess.ChessPiece;
 
 import java.util.Collection;
 import java.util.ArrayList;
