@@ -47,39 +47,39 @@ public class ChessBoard {
     public void resetBoard() {
         ChessBoard.pieces = new ChessPiece[8][8];
         //places all the starting pieces in the correct spots for chess
-        for (int row = 0; row < 8; row++){
-            for (int col = 0; col < 8; col++){
-                if (row == 1) {
+        for (int row = 1; row < 9; row++){
+            for (int col = 1; col < 9; col++){
+                if (row == 2) {
                     pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.PAWN);
                 }
-                if (row == 6) {
+                if (row == 7) {
                     pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.PAWN);
                 }
-                if (row == 0){
-                    if (col == 0 || col == 7){
+                if (row == 1){
+                    if (col == 1 || col == 8){
                         pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.ROOK);
                     }
-                    else if (col == 1 || col == 6) {
+                    else if (col == 2 || col == 7) {
                         pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT);
                     }
-                    else if (col == 2 || col == 5) {
+                    else if (col == 3 || col == 6) {
                         pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.BISHOP);
                     }
-                    else if (col == 3) {
+                    else if (col == 4) {
                         pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.QUEEN);
                     }
                     else {
                         pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.QUEEN);
                     }
                 }
-                if (row == 7) {
-                    if (col == 0 || col == 7) {
+                if (row == 8) {
+                    if (col == 1 || col == 8) {
                         pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.ROOK);
-                    } else if (col == 1 || col == 6) {
+                    } else if (col == 2 || col == 7) {
                         pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT);
-                    } else if (col == 2 || col == 5) {
+                    } else if (col == 3 || col == 6) {
                         pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.BISHOP);
-                    } else if (col == 3) {
+                    } else if (col == 4) {
                         pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.QUEEN);
                     } else {
                         pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.QUEEN);
