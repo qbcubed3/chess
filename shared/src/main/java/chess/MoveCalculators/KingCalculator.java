@@ -23,8 +23,12 @@ public class KingCalculator implements MoveCalculator{
                 if (j < 1 || j > 8){
                     continue;
                 }
+                System.out.println("i: " + i + " j: " + j);
                 ChessPosition curPosition = new ChessPosition(i, j);
-                if (!curPosition.equals(position) && (board.getPiece(curPosition).getTeamColor() != currentPiece.getTeamColor())){
+                if (board.getPiece(curPosition) == null){
+                    moveCollection.add(new ChessMove(position, curPosition, null));
+                }
+                else if (!curPosition.equals(position) && (board.getPiece(curPosition).getTeamColor() != currentPiece.getTeamColor())){
                     moveCollection.add(new ChessMove(position, curPosition, null));
                 }
             }

@@ -68,13 +68,13 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        MoveCalculator calc = new PawnCalculator();
         if (board.getPiece(myPosition).pieceType == pieceType.BISHOP){
-            BishopCalculator calc = new BishopCalculator();
+            calc = new BishopCalculator();
         }
         if (board.getPiece(myPosition).pieceType == pieceType.KING){
-            KingCalculator calc = new KingCalculator();
+            calc = new KingCalculator();
         }
-        MoveCalculator calc = new PawnCalculator();
         return calc.pieceMoves(board, myPosition);
     }
 }
