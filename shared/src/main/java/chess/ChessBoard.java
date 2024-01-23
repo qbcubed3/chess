@@ -2,6 +2,7 @@ package chess;
 
 import static chess.ChessGame.TeamColor;
 import static chess.ChessPiece.PieceType;
+import java.lang.StringBuilder;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -10,7 +11,31 @@ import static chess.ChessPiece.PieceType;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    static ChessPiece[][] pieces;
+    static ChessPiece[][] pieces = new ChessPiece[9][9];
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() != this.getClass()){
+            return false;
+        }
+        else{
+            ChessBoard other = (ChessBoard) obj;
+            for (int i = 1; i < 9; i++){
+                for (int j = 1; j < 9; j++){
+                    ChessPosition cur = new ChessPosition(i, j);
+                    if (other.getPiece(cur) != this.getPiece(cur)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     public ChessBoard() {
         pieces = new ChessPiece[9][9];
@@ -45,47 +70,59 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        ChessBoard.pieces = new ChessPiece[8][8];
+        ChessBoard.pieces = new ChessPiece[9][9];
         //places all the starting pieces in the correct spots for chess
         for (int row = 1; row < 9; row++){
             for (int col = 1; col < 9; col++){
+                ChessPosition currentPosition = new ChessPosition(row, col);
                 if (row == 2) {
-                    pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.PAWN);
+                    this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.PAWN));
                 }
                 if (row == 7) {
-                    pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.PAWN);
+                    this.addPiece(currentPosition, new ChessPiece(TeamColor.BLACK, PieceType.PAWN));
                 }
                 if (row == 1){
                     if (col == 1 || col == 8){
-                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.ROOK);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.ROOK));
                     }
                     else if (col == 2 || col == 7) {
-                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT));
                     }
                     else if (col == 3 || col == 6) {
-                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.BISHOP);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.BISHOP));
                     }
                     else if (col == 4) {
-                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.QUEEN);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.QUEEN));
                     }
                     else {
-                        pieces[row][col] = new ChessPiece(TeamColor.WHITE, PieceType.QUEEN);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.KING));
                     }
                 }
                 if (row == 8) {
                     if (col == 1 || col == 8) {
-                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.ROOK);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.ROOK));
                     } else if (col == 2 || col == 7) {
-                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT));
                     } else if (col == 3 || col == 6) {
-                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.BISHOP);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.BISHOP));
                     } else if (col == 4) {
-                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.QUEEN);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.QUEEN));
                     } else {
-                        pieces[row][col] = new ChessPiece(TeamColor.BLACK, PieceType.QUEEN);
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.KING));
                     }
                 }
             }
-        };
+        }
+    }
+
+    public String toString(){
+        StringBuilder finalString = new StringBuilder();
+        for (int i = 0; i < pieces.length; i++){
+            for (int j = 0; j < pieces[i].length; j++){
+                finalString.append(pieces[i][j]);
+            }
+        }
+
+        return finalString.toString();
     }
 }
