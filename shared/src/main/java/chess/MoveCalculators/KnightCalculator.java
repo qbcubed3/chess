@@ -25,7 +25,7 @@ public class KnightCalculator implements MoveCalculator{
                     continue;
                 }
                 ChessPosition curPosition = new ChessPosition(i, j);
-                if (board.getPiece(curPosition) == (null) || board.getPiece(curPosition).getTeamColor() == currentPiece.getTeamColor()) {
+                if (board.getPiece(curPosition) == (null) || board.getPiece(curPosition).getTeamColor() != currentPiece.getTeamColor()) {
                     moveCollection.add(new ChessMove(position, curPosition, null));
                 }
             }
@@ -40,7 +40,7 @@ public class KnightCalculator implements MoveCalculator{
                     continue;
                 }
                 ChessPosition curPosition = new ChessPosition(i, j);
-                if (board.getPiece(curPosition) == (null) || board.getPiece(curPosition).getTeamColor() == currentPiece.getTeamColor()) {
+                if (board.getPiece(curPosition) == (null) || board.getPiece(curPosition).getTeamColor() != currentPiece.getTeamColor()) {
                     moveCollection.add(new ChessMove(position, curPosition, null));
                 }
             }

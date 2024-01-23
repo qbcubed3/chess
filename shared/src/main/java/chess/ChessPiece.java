@@ -75,6 +75,9 @@ public class ChessPiece {
         if (board.getPiece(myPosition).pieceType == pieceType.KING){
             calc = new KingCalculator();
         }
+        if (board.getPiece(myPosition).pieceType == pieceType.KNIGHT){
+            calc = new KnightCalculator();
+        }
         return calc.pieceMoves(board, myPosition);
     }
 }
