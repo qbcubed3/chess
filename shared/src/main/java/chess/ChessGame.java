@@ -10,8 +10,11 @@ import java.util.Collection;
  */
 public class ChessGame {
     TeamColor teamTurn;
+    ChessBoard board;
     public ChessGame() {
         teamTurn = TeamColor.WHITE;
+        board = new ChessBoard();
+        board.resetBoard();
     }
 
     /**
@@ -56,7 +59,26 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        ChessPosition curPosition = move.getStartPosition();
+        ChessPosition endPosition = move.getEndPosition();
+        ChessPiece currentPiece = board.getPiece(curPosition);
+        Collection<ChessMove> moveCollection = currentPiece.pieceMoves(board, curPosition);
+
+        for (ChessMove possibleMove: moveCollection){
+            if (possibleMove.equals(move)){
+                board.popPiece(curPosition);
+                if (isInCheck(currentPiece.getTeamColor())){
+                    board.addPiece(curPosition, currentPiece);
+                    throw new InvalidMoveException("That move puts your king in check");
+                }
+                else{
+                    board.popPiece(endPosition);
+                    board.addPiece(endPosition, currentPiece);
+                }
+            }
+        }
+
+        throw new InvalidMoveException("Piece cannot reach that square");
     }
 
     /**

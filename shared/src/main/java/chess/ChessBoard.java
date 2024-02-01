@@ -66,6 +66,21 @@ public class ChessBoard {
     }
 
     /**
+     * takes a piece off the chessboard and returns it
+     *
+     * @param position of piece to be popped
+     * @return the chess piece that is popped
+     */
+    public ChessPiece popPiece(ChessPosition position){
+        if (ChessBoard.pieces[position.getRow()][position.getColumn()] == null){
+            return null;
+        }
+        ChessPiece curPiece = getPiece(position);
+        pieces[position.getRow()][position.getColumn()] = null;
+        return curPiece;
+    }
+
+    /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
