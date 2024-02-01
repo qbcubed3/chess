@@ -148,7 +148,7 @@ public class ChessGame {
                     continue;
                 }
                 Collection<ChessMove> validMoves = curPiece.pieceMoves(board, curPosition);
-                if (!validMoves.isEmpty()){
+                if (!validMoves.isEmpty()){ //if there is a valid move then its not stalemate and it returns false
                     return false;
                 }
             }
