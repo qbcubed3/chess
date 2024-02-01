@@ -81,6 +81,31 @@ public class ChessBoard {
     }
 
     /**
+     * finds the king of the given color on the board
+     * @param teamColor the color of the piece the function should find
+     * @return the position of the piece when it is found
+     */
+    public ChessPosition findKing(ChessGame.TeamColor teamColor){
+        ChessPosition kingPosition = null;
+        //finds where the king is of the specified teamColor
+        for (int i = 1; i < 9; i++){
+            for (int j = 1; j < 9; j++){
+                ChessPosition curPosition = new ChessPosition(i, j);
+                if (getPiece(curPosition) == null){continue;}
+                if (getPiece(curPosition).getTeamColor() == teamColor
+                        && getPiece(curPosition).getPieceType() == ChessPiece.PieceType.KING){
+                    kingPosition = curPosition;
+                    break;
+                }
+            }
+            if (kingPosition != null){
+                break;
+            }
+        }
+        return kingPosition;
+    }
+
+    /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */

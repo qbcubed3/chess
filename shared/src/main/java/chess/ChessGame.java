@@ -102,31 +102,18 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        ChessPosition kingPosition = null;
-        //finds where the king is of the specified teamColor
-        for (int i = 1; i < 9; i++){
-            for (int j = 1; j < 9; j++){
-                ChessPosition curPosition = new ChessPosition(i, j);
-                if (board.getPiece(curPosition).getTeamColor() == teamColor
-                        && board.getPiece(curPosition).getPieceType() == ChessPiece.PieceType.KING){
-                    kingPosition = curPosition;
-                    break;
-                }
-            }
-            if (kingPosition != null){
-                break;
-            }
-        }
+        ChessPosition kingPosition = board.findKing(teamColor);
 
         //uses the found king position to make sure that no piece can attack it
         for (int i = 1; i < 9; i++){
             for (int j = 1; j < 9; j++){
                 ChessPosition curPosition = new ChessPosition(i, j);
                 ChessPiece curPiece = board.getPiece(curPosition);
-                if (board.getPiece(curPosition).getTeamColor() != teamColor){
+                if (curPiece == null){continue;}
+                if (curPiece.getTeamColor() != teamColor){
                     Collection<ChessMove> moveCollection = curPiece.pieceMoves(board, curPosition);
                     for (ChessMove move: moveCollection){
-                        if (move.getEndPosition() == kingPosition){
+                        if (move.getEndPosition().equals(kingPosition)){
                             return true;
                         }
                     }
@@ -143,7 +130,25 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (!isInCheck(teamColor)){return false;}
+        ChessPosition kingPosition = board.findKing(teamColor);
+        ChessPiece king = board.getPiece(kingPosition);
+        Collection<ChessMove> validMoves = king.pieceMoves(board, kingPosition);
+        Collection<ChessMove> coveredMoves = new HashSet<ChessMove>();
+        //finds all the moves that are possible from the other color pieces
+        for (ChessMove move: validMoves){
+            ChessPosition curPosition = move.getEndPosition();
+            ChessPiece tempPiece = board.popPiece(curPosition);
+            board.popPiece(move.getStartPosition());
+            board.addPiece(curPosition, king);
+            if (!isInCheck(teamColor)){
+                return false;
+            }
+            board.popPiece(curPosition);
+            board.addPiece(curPosition, tempPiece);
+            board.addPiece(move.getStartPosition(), king);
+        }
+        return true;
     }
 
     /**
@@ -154,6 +159,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        if (!isInCheckmate(teamColor)){return false;}
         for (int i = 0; i < 9; i++){
             for (int j = 0; j < 9; j++){
                 ChessPosition curPosition = new ChessPosition(i, j);
