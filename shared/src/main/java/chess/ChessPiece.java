@@ -77,19 +77,19 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         MoveCalculator calc = new PawnCalculator();
-        if (board.getPiece(myPosition).pieceType == pieceType.BISHOP){
+        if (board.getPiece(myPosition).pieceType == ChessPiece.PieceType.BISHOP){
             calc = new BishopCalculator();
         }
-        if (board.getPiece(myPosition).pieceType == pieceType.KING){
+        if (board.getPiece(myPosition).pieceType == ChessPiece.PieceType.KING){
             calc = new KingCalculator();
         }
-        if (board.getPiece(myPosition).pieceType == pieceType.KNIGHT){
+        if (board.getPiece(myPosition).pieceType == ChessPiece.PieceType.KNIGHT){
             calc = new KnightCalculator();
         }
-        if (board.getPiece(myPosition).pieceType == pieceType.ROOK){
+        if (board.getPiece(myPosition).pieceType == ChessPiece.PieceType.ROOK){
             calc = new RookCalculator();
         }
-        if (board.getPiece(myPosition).pieceType == pieceType.QUEEN){
+        if (board.getPiece(myPosition).pieceType == ChessPiece.PieceType.QUEEN){
             calc = new QueenCalculator();
         }
         return calc.pieceMoves(board, myPosition);
