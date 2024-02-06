@@ -157,9 +157,9 @@ public class ChessBoard {
 
     public String toString(){
         StringBuilder finalString = new StringBuilder();
-        for (int i = 0; i < pieces.length; i++){
-            for (int j = 0; j < pieces[i].length; j++){
-                finalString.append(pieces[i][j]);
+        for (ChessPiece[] piece : pieces) {
+            for (ChessPiece chessPiece : piece) {
+                finalString.append(chessPiece);
             }
         }
 

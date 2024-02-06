@@ -77,7 +77,9 @@ public class ChessGame {
         ChessPosition endPosition = move.getEndPosition();
         ChessPiece currentPiece = board.getPiece(curPosition);
         Collection<ChessMove> moveCollection = currentPiece.pieceMoves(board, curPosition);
-
+        if (!moveCollection.contains(move)){
+            throw new InvalidMoveException("Piece cannot reach that square");
+        }
         for (ChessMove possibleMove: moveCollection){
             if (possibleMove.equals(move)){
                 board.popPiece(curPosition);
@@ -92,7 +94,6 @@ public class ChessGame {
             }
         }
 
-        throw new InvalidMoveException("Piece cannot reach that square");
     }
 
     /**
@@ -108,6 +109,7 @@ public class ChessGame {
         for (int i = 1; i < 9; i++){
             for (int j = 1; j < 9; j++){
                 ChessPosition curPosition = new ChessPosition(i, j);
+                System.out.println(curPosition);
                 ChessPiece curPiece = board.getPiece(curPosition);
                 if (curPiece == null){continue;}
                 if (curPiece.getTeamColor() != teamColor){

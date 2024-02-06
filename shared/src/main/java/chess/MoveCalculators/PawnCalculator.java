@@ -20,6 +20,9 @@ public class PawnCalculator implements MoveCalculator{
         //finds the moves for the white piece
         if (currentPiece.getTeamColor() == chess.ChessGame.TeamColor.WHITE) {
             for (int i = column - 1; i < column + 2; i++) {
+                if (i > 8 || i < 1){
+                    continue;
+                }
                 ChessPosition currentPosition = new ChessPosition(row + 1, i);
                 boolean promotion = row + 1 == 8;
                 boolean validMove = false;
@@ -57,6 +60,9 @@ public class PawnCalculator implements MoveCalculator{
         //finds the moves for the black piece
         else {
             for (int i = column - 1; i < column + 2; i++) {
+                if (i > 8 || i < 1){
+                    continue;
+                }
                 ChessPosition currentPosition = new ChessPosition(row - 1, i);
                 boolean promotion = row - 1 == 1;
                 boolean validMove = false;
