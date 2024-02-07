@@ -140,15 +140,15 @@ public class ChessBoard {
                 }
                 if (row == 8) {
                     if (col == 1 || col == 8) {
-                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.ROOK));
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.BLACK, PieceType.ROOK));
                     } else if (col == 2 || col == 7) {
-                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT));
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT));
                     } else if (col == 3 || col == 6) {
-                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.BISHOP));
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.BLACK, PieceType.BISHOP));
                     } else if (col == 4) {
-                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.QUEEN));
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.BLACK, PieceType.QUEEN));
                     } else {
-                        this.addPiece(currentPosition, new ChessPiece(TeamColor.WHITE, PieceType.KING));
+                        this.addPiece(currentPosition, new ChessPiece(TeamColor.BLACK, PieceType.KING));
                     }
                 }
             }

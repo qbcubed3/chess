@@ -15,7 +15,6 @@ public class BishopCalculator implements MoveCalculator {
         Collection<ChessMove> moveCollection = new ArrayList<ChessMove>();
         int row = position.getRow() + 1;
         int column = position.getColumn() + 1;
-        System.out.println("row: " + row + "col: " + column);
         //looks for moves in the upper right path
         for (int i = row; i < 9; i++){
             if(column > 8) {
@@ -90,10 +89,6 @@ public class BishopCalculator implements MoveCalculator {
                 break;
             }
             column += 1;
-        }
-
-        for (ChessMove move: moveCollection){
-            System.out.println(move);
         }
         return moveCollection;
     }
