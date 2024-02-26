@@ -11,6 +11,6 @@ public class myServerTests {
     @Order(1)
     public void testServer(){
         Server server = new Server();
-        server.run(1430);
+        server.run(8056);
     }
 }
