@@ -1,9 +1,9 @@
 package passoffTests.ServerTests;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import server.Server;
+import dataAccess.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class myServerTests {
@@ -11,6 +11,11 @@ public class myServerTests {
     @Order(1)
     public void testServer(){
         Server server = new Server();
-        server.run(8056);
+        System.out.println(server.run(5231));
+    }
+
+    @Test
+    @Order(2)
+    public void testClear(){
     }
 }

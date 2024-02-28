@@ -1,8 +1,11 @@
 package service;
 import service.ClearService;
+import dataAccess.*;
 
 public class ClearService {
     public static void clearDatabase(){
-        return;
+        MemoryAuthDAO.clearAuths();
+        MemoryGameDAO.clearGame();
+        MemoryUserDAO.clearUsers();
     }
 }
