@@ -3,10 +3,10 @@ import java.util.HashMap;
 import chess.ChessGame;
 
 public class MemoryGameDAO implements GameDAO{
-    static HashMap<Integer, String> whiteUsernames;
-    static HashMap<Integer, String> blackUsernames;
-    static HashMap<Integer, String> gameNames;
-    static HashMap<Integer, ChessGame> games;
+    static HashMap<Integer, String> whiteUsernames = new HashMap<>();
+    static HashMap<Integer, String> blackUsernames = new HashMap<>();
+    static HashMap<Integer, String> gameNames = new HashMap<>();
+    static HashMap<Integer, ChessGame> games = new HashMap<>();
 
     public static void clearGame(){
         whiteUsernames.clear();
@@ -14,4 +14,9 @@ public class MemoryGameDAO implements GameDAO{
         gameNames.clear();
         games.clear();
     }
+
+    public static int length(){
+        return whiteUsernames.size() + blackUsernames.size() + gameNames.size() + games.size();
+    }
 }
+

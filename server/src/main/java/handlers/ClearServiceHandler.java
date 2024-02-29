@@ -1,5 +1,6 @@
 package handlers;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -13,13 +14,11 @@ public class ClearServiceHandler{
         }
         catch (Exception e){
             response.status(500);
-            handlerException exception = new handlerException();
-            exception.setErrorCode("500");
-            exception.setErrorMessage(e.getMessage());
-            var serializer = new Gson();
-            var json = serializer.toJson(exception);
-            System.out.println(json);
-            return serializer.toJson(exception);
+            String message = e.getMessage();
+            JsonObject jsonError = new JsonObject();
+            jsonError.addProperty("message", "Error: " + message);
+
+            return jsonError.toString();
         }
         response.status(200);
 
