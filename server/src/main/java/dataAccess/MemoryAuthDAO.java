@@ -41,4 +41,16 @@ public class MemoryAuthDAO implements AuthDAO{
             throw new UnauthorizedException("authToken doesn't exist");
         }
     }
+    public static String getUsername(String auth) throws UnauthorizedException{
+        if (checkAuth(auth)){
+            return usernames.get(auth);
+        }
+        else{
+            throw new UnauthorizedException("authToken doesn't exist");
+        }
+    }
+
+    public static void printAuths(){
+        System.out.println(usernames);
+    }
 }

@@ -32,6 +32,7 @@ public class MemoryGameDAO implements GameDAO{
             String blackUsername = blackUsernames.get(gameId);
             GameDataModel data = new GameDataModel(gameId, whiteUsername, blackUsername, gameName, game);
             gameList.add(data);
+            System.out.println(gameId);
         }
         return gameList;
     }
@@ -39,21 +40,21 @@ public class MemoryGameDAO implements GameDAO{
     public static int createGame(String gameName){
         var gameId = gameNames.size() + 1;
         gameNames.put(gameId, gameName);
-        whiteUsernames.put(gameId, "");
-        blackUsernames.put(gameId, "");
+        whiteUsernames.put(gameId, null);
+        blackUsernames.put(gameId, null);
         games.put(gameId, new ChessGame());
         return gameId;
     }
 
     public static void joinGame(int gameId, String playerColor, String username)throws UsernameTakenException{
         if (playerColor.equals("BLACK")){
-            if (!blackUsernames.get(gameId).isEmpty()){
+            if (!(blackUsernames.get(gameId) == null) && !blackUsernames.get(gameId).isEmpty()){
                 throw new UsernameTakenException("black is already taken");
             }
             blackUsernames.replace(gameId, username);
         }
         else if (playerColor.equals("WHITE")){
-            if (!whiteUsernames.get(gameId).isEmpty()){
+            if (!(whiteUsernames.get(gameId) == null) && !whiteUsernames.get(gameId).isEmpty()){
                 throw new UsernameTakenException("white is already taken");
             }
             whiteUsernames.replace(gameId, username);

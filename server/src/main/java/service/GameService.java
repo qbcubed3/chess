@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class GameService {
     public static ArrayList<GameDataModel> listGames(String auth) throws UnauthorizedException {
+        MemoryAuthDAO.printAuths();
         if (!MemoryAuthDAO.checkAuth(auth)) {
             throw new UnauthorizedException("auth Token doesn't exist");
         }
@@ -31,7 +32,7 @@ public class GameService {
         else if (gameId == 0){
             throw new NullParameterException("game id can't be blank");
         }
-        String username = MemoryAuthDAO.findUsername(auth);
+        String username = MemoryAuthDAO.getUsername(auth);
         MemoryGameDAO.joinGame(gameId, playerColor, username);
     }
 }

@@ -66,7 +66,7 @@ public class UserServiceHandler {
         }
         catch (Exception e){
             response.status(500);
-            return "{ \"message\": \"Error: " + e.getMessage() + "\" }";
+            return "{ \"message\": \"Error: description\" }";
         }
     }
 }
