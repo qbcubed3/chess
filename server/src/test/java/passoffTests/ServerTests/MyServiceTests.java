@@ -25,6 +25,7 @@ public class MyServiceTests {
     @Test
     @Order(2)
     public void testRegister()throws UsernameTakenException, NullParameterException{
+        ClearService.clearDatabase();
         int length = MemoryUserDAO.length();
         UserDataModel user = new UserDataModel("punt", "tired", "gmail@gmail.com");
         UserService.registerUser(user);
@@ -35,6 +36,7 @@ public class MyServiceTests {
     @Test
     @Order(3)
     public void testBadRegister(){
+        ClearService.clearDatabase();
         int length = MemoryUserDAO.length();
         UserDataModel user = new UserDataModel("", "thing", "gamei");
         try{
@@ -47,6 +49,7 @@ public class MyServiceTests {
     @Test
     @Order(4)
     public void testLogin(){
+        ClearService.clearDatabase();
         int length = MemoryAuthDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "gamei");
         try{
@@ -61,6 +64,7 @@ public class MyServiceTests {
     @Test
     @Order(5)
     public void testBadLogin(){
+        ClearService.clearDatabase();
         int length = MemoryUserDAO.length();
         try{
             UserService.loginUser(null, "thing");
@@ -91,6 +95,7 @@ public class MyServiceTests {
     @Test
     @Order(7)
     public void testLogout(){
+        ClearService.clearDatabase();
         int length = MemoryAuthDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
@@ -105,6 +110,7 @@ public class MyServiceTests {
     @Test
     @Order(8)
     public void testBadLogout(){
+        ClearService.clearDatabase();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
             String auth = "authToken";
@@ -117,6 +123,7 @@ public class MyServiceTests {
     @Test
     @Order(9)
     public void testList(){
+        ClearService.clearDatabase();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         ArrayList<GameDataModel> games = null;
         try{
@@ -139,6 +146,7 @@ public class MyServiceTests {
     @Test
     @Order(10)
     public void testBadList(){
+        ClearService.clearDatabase();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
             UserService.registerUser(user);
@@ -154,6 +162,7 @@ public class MyServiceTests {
     @Test
     @Order(11)
     public void testCreate() {
+        ClearService.clearDatabase();
         int length = MemoryGameDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
@@ -168,6 +177,7 @@ public class MyServiceTests {
     @Test
     @Order(12)
     public void testBadCreate(){
+        ClearService.clearDatabase();
         int length = MemoryGameDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
@@ -181,6 +191,7 @@ public class MyServiceTests {
     @Test
     @Order(13)
     public void testJoin(){
+        ClearService.clearDatabase();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         UserDataModel user2 = new UserDataModel("username4", "thing", "ema4il");
         ArrayList<GameDataModel> games = null;
@@ -193,6 +204,7 @@ public class MyServiceTests {
             games = GameService.listGames(auth);
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             fail();
         }
         Assertions.assertEquals(games.getFirst().whiteUsername(), "username4");
@@ -201,6 +213,7 @@ public class MyServiceTests {
     @Test
     @Order(14)
     public void testBadJoin(){
+        ClearService.clearDatabase();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
             UserService.registerUser(user);
