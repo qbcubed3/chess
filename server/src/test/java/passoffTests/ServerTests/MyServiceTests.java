@@ -154,6 +154,28 @@ public class MyServiceTests {
     @Test
     @Order(11)
     public void testCreate() {
-        UserDataModel user = new UserDataModel
+        int length = MemoryGameDAO.length();
+        UserDataModel user = new UserDataModel("username", "thing", "email");
+        try{
+            String auth = UserService.registerUser(user);
+            GameService.createGame(auth, "game");
+        }
+        catch(Exception e){
+            fail();
+        }
+        Assertions.assertTrue(length < MemoryGameDAO.length());
+    }
+    @Test
+    @Order(12)
+    public void testBadCreate(){
+        int length = MemoryGameDAO.length();
+        UserDataModel user = new UserDataModel("username", "thing", "email");
+        try{
+            String auth = UserService.registerUser(user);
+            GameService.createGame(auth, null);
+        }
+        catch (Exception e){
+            Assertions.assertTrue(MemoryGameDAO.length() == length);
+        }
     }
 }
