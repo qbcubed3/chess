@@ -178,4 +178,40 @@ public class MyServiceTests {
             Assertions.assertTrue(MemoryGameDAO.length() == length);
         }
     }
+    @Test
+    @Order(13)
+    public void testJoin(){
+        UserDataModel user = new UserDataModel("username", "thing", "email");
+        UserDataModel user2 = new UserDataModel("username4", "thing", "ema4il");
+        ArrayList<GameDataModel> games = null;
+        try{
+            String auth = UserService.registerUser(user);
+            String auth2 = UserService.registerUser(user2);
+            int gameId = GameService.createGame(auth, "game");
+            GameService.joinGame(auth, gameId, "BLACK");
+            GameService.joinGame(auth2, gameId, "WHITE");
+            games = GameService.listGames(auth);
+        }
+        catch (Exception e){
+            fail();
+        }
+        Assertions.assertEquals(games.getFirst().whiteUsername(), "username4");
+        Assertions.assertEquals(games.getFirst().blackUsername(), "username");
+    }
+    @Test
+    @Order(14)
+    public void testBadJoin(){
+        UserDataModel user = new UserDataModel("username", "thing", "email");
+        try{
+            UserService.registerUser(user);
+            String auth = "auth";
+            GameService.joinGame(auth, 1, "");
+        }
+        catch (Exception e){
+            Assertions.assertEquals(2, 2);
+            return;
+        }
+        fail();
+    }
+
 }
