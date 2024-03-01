@@ -1,4 +1,6 @@
 package passoffTests.ServerTests;
+import chess.ChessGame;
+import model.GameDataModel;
 import model.UserDataModel;
 import org.junit.jupiter.api.*;
 import server.Server;
@@ -6,6 +8,8 @@ import dataAccess.*;
 import service.ClearService;
 import service.GameService;
 import service.UserService;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +29,7 @@ public class MyServiceTests {
         UserDataModel user = new UserDataModel("punt", "tired", "gmail@gmail.com");
         UserService.registerUser(user);
 
-        Assertions.assertTrue(MemoryUserDAO.length() > length);
+        assertTrue(MemoryUserDAO.length() > length);
     }
 
     @Test
@@ -37,7 +41,7 @@ public class MyServiceTests {
             UserService.registerUser(user);
         }
         catch (Exception e){
-            Assertions.assertEquals(length, MemoryUserDAO.length());
+            assertEquals(length, MemoryUserDAO.length());
         }
     }
     @Test
@@ -52,7 +56,7 @@ public class MyServiceTests {
         catch (Exception e){
             fail();
         }
-        Assertions.assertTrue(length < MemoryAuthDAO.length());
+        assertTrue(length < MemoryAuthDAO.length());
     }
     @Test
     @Order(5)
@@ -62,7 +66,7 @@ public class MyServiceTests {
             UserService.loginUser(null, "thing");
         }
         catch (Exception e){
-            Assertions.assertEquals(length, MemoryUserDAO.length());
+            assertEquals(length, MemoryUserDAO.length());
             return;
         }
         fail();
@@ -82,7 +86,7 @@ public class MyServiceTests {
         }
         ClearService.clearDatabase();
 
-        Assertions.assertTrue((MemoryUserDAO.length() + MemoryAuthDAO.length() + MemoryGameDAO.length()) <= length);
+        assertTrue((MemoryUserDAO.length() + MemoryAuthDAO.length() + MemoryGameDAO.length()) <= length);
     }
     @Test
     @Order(7)
@@ -96,7 +100,7 @@ public class MyServiceTests {
         catch(Exception e){
             fail();
         }
-        Assertions.assertEquals(length, MemoryAuthDAO.length());
+        assertEquals(length, MemoryAuthDAO.length());
     }
     @Test
     @Order(8)
@@ -107,7 +111,49 @@ public class MyServiceTests {
             UserService.logoutUser(auth);
         }
         catch (Exception e){
-            Assertions.assertEquals(2, 2);
+            assertEquals(2, 2);
         }
+    }
+    @Test
+    @Order(9)
+    public void testList(){
+        UserDataModel user = new UserDataModel("username", "thing", "email");
+        ArrayList<GameDataModel> games = null;
+        try{
+            String auth = UserService.registerUser(user);
+            GameService.createGame(auth, "game1");
+            games = GameService.listGames(auth);
+        }
+        catch (Exception e){
+            fail();
+        }
+        GameDataModel game = new GameDataModel(1, null, null, "game1", new ChessGame());
+        ArrayList<GameDataModel> testGames = new ArrayList<GameDataModel>();
+        testGames.add(game);
+        Assertions.assertEquals(games.getFirst().gameID(), testGames.getFirst().gameID());
+        Assertions.assertEquals(games.getFirst().gameName(), testGames.getFirst().gameName());
+        Assertions.assertNull(games.getFirst().whiteUsername());
+        Assertions.assertNull(games.getFirst().blackUsername());
+    }
+
+    @Test
+    @Order(10)
+    public void testBadList(){
+        UserDataModel user = new UserDataModel("username", "thing", "email");
+        try{
+            UserService.registerUser(user);
+            String auth = "authToken";
+            GameService.listGames(auth);
+        }
+        catch (Exception e){
+            Assertions.assertEquals(2, 2);
+            return;
+        }
+        fail();
+    }
+    @Test
+    @Order(11)
+    public void testCreate() {
+        UserDataModel user = new UserDataModel
     }
 }
