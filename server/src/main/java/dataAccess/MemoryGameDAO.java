@@ -50,13 +50,13 @@ public class MemoryGameDAO implements GameDAO{
             if (!blackUsernames.get(gameId).isEmpty()){
                 throw new UsernameTakenException("black is already taken");
             }
-            blackUsernames.replace(gameId, playerColor);
+            blackUsernames.replace(gameId, username);
         }
         else if (playerColor.equals("WHITE")){
             if (!whiteUsernames.get(gameId).isEmpty()){
                 throw new UsernameTakenException("white is already taken");
             }
-            whiteUsernames.replace(gameId, playerColor);
+            whiteUsernames.replace(gameId, username);
         }
     }
 }
