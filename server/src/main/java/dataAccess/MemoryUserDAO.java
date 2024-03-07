@@ -28,10 +28,9 @@ public class MemoryUserDAO implements UserDAO{
     public static String getAuth(String username, String password) throws UnauthorizedException{
         if (passwords.containsKey(username)) {
             if (passwords.get(username).equals(password)) {
-                return MemoryAuthDAO.addAuth(username);
+                return username;
             }
         }
         throw new UnauthorizedException("");
-
     }
 }

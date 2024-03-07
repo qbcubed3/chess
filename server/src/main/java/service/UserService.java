@@ -17,9 +17,11 @@ public class UserService {
     }
 
     public static String loginUser(String username, String password) throws UnauthorizedException, NullParameterException {
+        String user = "";
         String auth = "";
         if (!username.isEmpty() && !password.isEmpty()){
-            auth = MemoryUserDAO.getAuth(username, password);
+            user = MemoryUserDAO.getAuth(username, password);
+            auth = MemoryAuthDAO.addAuth(user);
         }
         else{
             throw new NullParameterException("username is null");
