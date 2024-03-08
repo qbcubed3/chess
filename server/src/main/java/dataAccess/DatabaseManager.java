@@ -38,18 +38,10 @@ public class DatabaseManager {
      */
     static void createDatabase() throws DataAccessException {
         try {
-            var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
+            var statement = "CREATE DATABASE IF NOT EXISTS" + databaseName;
             var conn = DriverManager.getConnection(connectionUrl, user, password);
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
-                var games = "CREATE TABLE IF NOT EXISTS games (" +
-                        "whiteUsername VARCHAR(100), " +
-                        "blackUsername VARCHAR(100), " +
-                        "gameName VARCHAR(100), " +
-                        "gameID INT AUTO_INCREMENT PRIMARY KEY, " +
-                        "game VARCHAR(500))";
-                var gamesState= conn.prepareStatement(games);
-                gamesState.executeUpdate();
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());

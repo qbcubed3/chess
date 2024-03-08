@@ -12,25 +12,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SQLGameDAO {
-
-    public SQLGameDAO() {
-        try{
-            DatabaseManager.createDatabase();
-            var conn = DatabaseManager.getConnection();
-            var statement = "CREATE TABLE IF NOT EXISTS games (" +
-                    "whiteUsername VARCHAR(100), " +
-                    "blackUsername VARCHAR(100), " +
-                    "gameName VARCHAR(100), " +
-                    "gameID INT AUTO_INCREMENT PRIMARY KEY, " +
-                    "game VARCHAR(500))";
-            var preparedStatement = conn.prepareStatement(statement);
-            preparedStatement.executeUpdate();
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS games (" +
+            "whiteUsername VARCHAR(100), " +
+            "blackUsername VARCHAR(100), " +
+            "gameName VARCHAR(100), " +
+            "gameID INT AUTO_INCREMENT PRIMARY KEY, " +
+            "game VARCHAR(500))
+            """
+    };
+    public SQLGameDAO() throws Exception{
+       configureDatabase();
     }
-    private void configureDatabase(String[] createStatements) throws DataAccessException {
+
+    private void configureDatabase() throws Exception {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createStatements) {
@@ -39,17 +35,7 @@ public class SQLGameDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("Error: Unable to configure database");
-        }
-    }
-
-    public void configureDatabase() throws Exception {
-        try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("SELECT 1+1")) {
-                var rs = preparedStatement.executeQuery();
-                rs.next();
-                System.out.println(rs.getInt(1));
-            }
+            throw new Exception(ex.getMessage());
         }
     }
     public static void clearGame(){
