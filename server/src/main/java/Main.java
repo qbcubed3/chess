@@ -9,7 +9,9 @@ public class Main {
         SQLUserDAO.createTable();
         SQLAuthDAO.createTable();
         SQLGameDAO.createTable();
-        SQLUserDAO.registerUser(new UserDataModel("username", "thing", "email@email.com"));
-        SQLUserDAO.clearUsers();
+        SQLAuthDAO.clearAuths();
+        SQLGameDAO.createGame("game");
+        String auth = SQLAuthDAO.addAuth("punitiveMedal");
+        System.out.println(SQLAuthDAO.checkAuth(auth));
     }
 }

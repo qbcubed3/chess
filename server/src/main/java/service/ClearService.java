@@ -4,8 +4,8 @@ import dataAccess.*;
 
 public class ClearService {
     public static void clearDatabase(){
-        MemoryAuthDAO.clearAuths();
-        MemoryGameDAO.clearGame();
-        MemoryUserDAO.clearUsers();
+        SQLAuthDAO.clearAuths();
+        SQLGameDAO.clearGame();
+        SQLUserDAO.clearUsers();
     }
 }

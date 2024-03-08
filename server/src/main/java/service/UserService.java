@@ -12,16 +12,16 @@ public class UserService {
         if (data.email().isEmpty() || data.username().isEmpty() || data.password().isEmpty()){
             throw new NullParameterException("Error: bad request");
         }
-        MemoryUserDAO.registerUser(data);
-        return MemoryAuthDAO.addAuth(data.username());
+        SQLUserDAO.registerUser(data);
+        return SQLAuthDAO.addAuth(data.username());
     }
 
     public static String loginUser(String username, String password) throws UnauthorizedException, NullParameterException {
         String user = "";
         String auth = "";
         if (!username.isEmpty() && !password.isEmpty()){
-            user = MemoryUserDAO.getAuth(username, password);
-            auth = MemoryAuthDAO.addAuth(user);
+            user = SQLUserDAO.getAuth(username, password);
+            auth = SQLAuthDAO.addAuth(user);
         }
         else{
             throw new NullParameterException("username is null");
@@ -30,6 +30,6 @@ public class UserService {
     }
 
     public static String logoutUser(String auth) throws UnauthorizedException{
-        return MemoryAuthDAO.findUsername(auth);
+        return SQLAuthDAO.removeUsername(auth);
     }
 }

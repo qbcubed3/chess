@@ -31,7 +31,7 @@ public class MemoryAuthDAO implements AuthDAO{
         return usernames.containsKey(auth);
     }
 
-    public static String findUsername(String auth) throws UnauthorizedException{
+    public static String removeUsername(String auth) throws UnauthorizedException{
         if (checkAuth(auth)){
             String authToken = usernames.get(auth);
             usernames.remove(auth);

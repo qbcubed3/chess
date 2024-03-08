@@ -26,51 +26,51 @@ public class MyServiceTests {
     @Order(2)
     public void testRegister()throws UsernameTakenException, NullParameterException{
         ClearService.clearDatabase();
-        int length = MemoryUserDAO.length();
+        int length = SQLUserDAO.length();
         UserDataModel user = new UserDataModel("punt", "tired", "gmail@gmail.com");
         UserService.registerUser(user);
 
-        assertTrue(MemoryUserDAO.length() > length);
+        assertTrue(SQLUserDAO.length() > length);
     }
 
     @Test
     @Order(3)
     public void testBadRegister(){
         ClearService.clearDatabase();
-        int length = MemoryUserDAO.length();
+        int length = SQLUserDAO.length();
         UserDataModel user = new UserDataModel("", "thing", "gamei");
         try{
             UserService.registerUser(user);
         }
         catch (Exception e){
-            assertEquals(length, MemoryUserDAO.length());
+            assertEquals(length, SQLUserDAO.length());
         }
     }
     @Test
     @Order(4)
     public void testLogin(){
         ClearService.clearDatabase();
-        int length = MemoryAuthDAO.length();
+        int length = SQLAuthDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "gamei");
         try{
-            MemoryUserDAO.registerUser(user);
+            SQLUserDAO.registerUser(user);
             UserService.loginUser("username", "thing");
         }
         catch (Exception e){
             fail();
         }
-        assertTrue(length < MemoryAuthDAO.length());
+        assertTrue(length < SQLAuthDAO.length());
     }
     @Test
     @Order(5)
     public void testBadLogin(){
         ClearService.clearDatabase();
-        int length = MemoryUserDAO.length();
+        int length = SQLUserDAO.length();
         try{
             UserService.loginUser(null, "thing");
         }
         catch (Exception e){
-            assertEquals(length, MemoryUserDAO.length());
+            assertEquals(length, SQLUserDAO.length());
             return;
         }
         fail();
@@ -78,7 +78,7 @@ public class MyServiceTests {
     @Test
     @Order(6)
     public void testClear(){
-        int length = MemoryUserDAO.length() + MemoryAuthDAO.length() + MemoryGameDAO.length();
+        int length = SQLUserDAO.length() + SQLAuthDAO.length() + SQLGameDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "gamei");
         try {
             String auth = UserService.registerUser(user);
@@ -90,13 +90,13 @@ public class MyServiceTests {
         }
         ClearService.clearDatabase();
 
-        assertTrue((MemoryUserDAO.length() + MemoryAuthDAO.length() + MemoryGameDAO.length()) <= length);
+        assertTrue((SQLUserDAO.length() + SQLAuthDAO.length() + SQLGameDAO.length()) <= length);
     }
     @Test
     @Order(7)
     public void testLogout(){
         ClearService.clearDatabase();
-        int length = MemoryAuthDAO.length();
+        int length = SQLAuthDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
             String auth = UserService.registerUser(user);
@@ -105,7 +105,7 @@ public class MyServiceTests {
         catch(Exception e){
             fail();
         }
-        assertEquals(length, MemoryAuthDAO.length());
+        assertEquals(length, SQLAuthDAO.length());
     }
     @Test
     @Order(8)
@@ -134,7 +134,7 @@ public class MyServiceTests {
         catch (Exception e){
             fail();
         }
-        GameDataModel game = new GameDataModel(1, null, null, "game1", new ChessGame());
+        GameDataModel game = new GameDataModel(0, null, null, "game1", new ChessGame());
         ArrayList<GameDataModel> testGames = new ArrayList<GameDataModel>();
         testGames.add(game);
         Assertions.assertEquals(games.getFirst().gameID(), testGames.getFirst().gameID());
@@ -163,7 +163,7 @@ public class MyServiceTests {
     @Order(11)
     public void testCreate() {
         ClearService.clearDatabase();
-        int length = MemoryGameDAO.length();
+        int length = SQLGameDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
             String auth = UserService.registerUser(user);
@@ -172,20 +172,20 @@ public class MyServiceTests {
         catch(Exception e){
             fail();
         }
-        Assertions.assertTrue(length < MemoryGameDAO.length());
+        Assertions.assertTrue(length < SQLGameDAO.length());
     }
     @Test
     @Order(12)
     public void testBadCreate(){
         ClearService.clearDatabase();
-        int length = MemoryGameDAO.length();
+        int length = SQLGameDAO.length();
         UserDataModel user = new UserDataModel("username", "thing", "email");
         try{
             String auth = UserService.registerUser(user);
             GameService.createGame(auth, null);
         }
         catch (Exception e){
-            Assertions.assertTrue(MemoryGameDAO.length() == length);
+            Assertions.assertTrue(SQLGameDAO.length() == length);
         }
     }
     @Test
@@ -207,6 +207,7 @@ public class MyServiceTests {
             System.out.println(e.getMessage());
             fail();
         }
+        System.out.println(games);
         Assertions.assertEquals(games.getFirst().whiteUsername(), "username4");
         Assertions.assertEquals(games.getFirst().blackUsername(), "username");
     }

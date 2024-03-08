@@ -7,32 +7,28 @@ import java.util.ArrayList;
 
 public class GameService {
     public static ArrayList<GameDataModel> listGames(String auth) throws UnauthorizedException {
-        MemoryAuthDAO.printAuths();
-        if (!MemoryAuthDAO.checkAuth(auth)) {
+        if (!SQLAuthDAO.checkAuth(auth)) {
             throw new UnauthorizedException("auth Token doesn't exist");
         }
-        return MemoryGameDAO.getGames();
+        return SQLGameDAO.getGames();
     }
 
     public static int createGame(String auth, String gameName) throws UnauthorizedException, NullParameterException{
-        if (!MemoryAuthDAO.checkAuth(auth)){
+        if (!SQLAuthDAO.checkAuth(auth)){
             throw new UnauthorizedException("auth Token doesn't exist");
         }
         else if (gameName.isEmpty()){
             throw new NullParameterException("game name can't be blank");
         }
 
-        return MemoryGameDAO.createGame(gameName);
+        return SQLGameDAO.createGame(gameName);
     }
 
     public static void joinGame(String auth, int gameId, String playerColor)throws UnauthorizedException, NullParameterException, UsernameTakenException{
-        if (!MemoryAuthDAO.checkAuth(auth)){
+        if (!SQLAuthDAO.checkAuth(auth)){
             throw new UnauthorizedException("auth Token doesn't exist");
         }
-        else if (gameId == 0){
-            throw new NullParameterException("game id can't be blank");
-        }
-        String username = MemoryAuthDAO.getUsername(auth);
-        MemoryGameDAO.joinGame(gameId, playerColor, username);
+        String username = SQLAuthDAO.getUsername(auth);
+        SQLGameDAO.joinGame(gameId, playerColor, username);
     }
 }

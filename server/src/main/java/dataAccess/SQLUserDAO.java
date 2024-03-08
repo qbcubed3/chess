@@ -80,6 +80,7 @@ public class SQLUserDAO {
 
     public static String getAuth(String username, String password) throws UnauthorizedException{
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        var checkStatement = "SELECT username FROM users WHERE username = ?";
         var statement = "SELECT password FROM users WHERE username = ?";
         try(var conn = DatabaseManager.getConnection()){
             var preparedStatement = conn.prepareStatement(statement);
