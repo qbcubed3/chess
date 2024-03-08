@@ -1,17 +1,8 @@
 import chess.*;
-import dataAccess.*;
-import model.UserDataModel;
-import server.Server;
-
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        new SQLAuthDAO();
-        new SQLGameDAO();
-        new SQLUserDAO();
-        SQLAuthDAO.clearAuths();
-        SQLGameDAO.createGame("game");
-        String auth = SQLAuthDAO.addAuth("punitiveMedal");
-        System.out.println(SQLAuthDAO.checkAuth(auth));
+    public static void main(String[] args) {
+        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        System.out.println("♕ 240 Chess Client: " + piece);
     }
 }
