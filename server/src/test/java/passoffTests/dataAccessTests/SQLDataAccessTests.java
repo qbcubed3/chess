@@ -1,4 +1,4 @@
-package passoffTests.ServerTests;
+package passoffTests.dataAccessTests;
 
 import dataAccess.SQLDataAccess.SQLAuthDAO;
 import dataAccess.SQLDataAccess.SQLUserDAO;
