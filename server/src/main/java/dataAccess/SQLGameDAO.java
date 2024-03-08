@@ -13,9 +13,10 @@ import java.util.ArrayList;
 
 public class SQLGameDAO {
 
-    public static void createTable() throws Exception {
-        DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
+    public SQLGameDAO() {
+        try{
+            DatabaseManager.createDatabase();
+            var conn = DatabaseManager.getConnection();
             var statement = "CREATE TABLE IF NOT EXISTS games (" +
                     "whiteUsername VARCHAR(100), " +
                     "blackUsername VARCHAR(100), " +
@@ -25,11 +26,32 @@ public class SQLGameDAO {
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.executeUpdate();
         }
-        catch (SQLException e){
-            throw new Exception(e.getMessage());
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    private void configureDatabase(String[] createStatements) throws DataAccessException {
+        DatabaseManager.createDatabase();
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("Error: Unable to configure database");
         }
     }
 
+    public void configureDatabase() throws Exception {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT 1+1")) {
+                var rs = preparedStatement.executeQuery();
+                rs.next();
+                System.out.println(rs.getInt(1));
+            }
+        }
+    }
     public static void clearGame(){
         var statement = "DELETE from games";
         try{

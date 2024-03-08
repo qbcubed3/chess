@@ -13,7 +13,6 @@ public class SQLDataAccessTests {
     @Test
     public void testUserRegister(){
         try{
-            SQLUserDAO.createTable();
             SQLUserDAO.clearUsers();
             var user = new UserDataModel("punitiveMedal", "passkey", "email@email.com");
             SQLUserDAO.registerUser(user);
@@ -29,7 +28,6 @@ public class SQLDataAccessTests {
     @Test
     public void testBadUserRegister(){
         try {
-            SQLUserDAO.createTable();
             SQLUserDAO.clearUsers();
             var user = new UserDataModel("punitiveMedal", "passkey", "email@email.com");
             SQLUserDAO.registerUser(user);
@@ -44,7 +42,6 @@ public class SQLDataAccessTests {
     @Test
     public void testGetAuth() {
         try {
-            SQLUserDAO.createTable();
             SQLUserDAO.clearUsers();
             var user = new UserDataModel("punitiveMedal", "passkey", "email@email.com");
             SQLUserDAO.registerUser(user);
@@ -58,7 +55,6 @@ public class SQLDataAccessTests {
     @Test
     public void testBadGetAuth() {
         try {
-            SQLUserDAO.createTable();
             SQLUserDAO.clearUsers();
             var user = new UserDataModel("punitiveMedal", "passkey", "email@email.com");
             SQLUserDAO.registerUser(user);

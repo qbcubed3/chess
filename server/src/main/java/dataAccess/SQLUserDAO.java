@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.sql.*;
 
 public class SQLUserDAO {
-    public static void createTable() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
+
+    public SQLUserDAO() {
+        try{
+            DatabaseManager.createDatabase();
+            var conn = DatabaseManager.getConnection();
             var statement = "CREATE TABLE IF NOT EXISTS users (" +
                     "username VARCHAR(100) UNIQUE, " +
                     "password VARCHAR(255), " +
@@ -17,7 +19,7 @@ public class SQLUserDAO {
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.executeUpdate();
         }
-        catch (SQLException e){
+        catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
