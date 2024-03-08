@@ -9,7 +9,7 @@ import handlers.UserServiceHandler;
 import spark.*;
 
 public class Server {
-    public int run(int desiredPort) {
+    public int run(int desiredPort){
         Spark.port(desiredPort);
         Spark.staticFiles.location("/web");
         Spark.delete("/db", ClearServiceHandler::callClearService);

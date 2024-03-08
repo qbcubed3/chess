@@ -10,9 +10,7 @@ public class SQLAuthDAO {
 
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS auths(" +
-            username VARCHAR(100), " +
-            auth VARCHAR(155))" +
+            CREATE TABLE IF NOT EXISTS auths (`username` VARCHAR(100), `auth` VARCHAR(155))
             """
     };
     private void configureDatabase() throws Exception {

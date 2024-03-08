@@ -10,10 +10,7 @@ public class SQLUserDAO {
 
     private final String[] createStatements = {
             """
-            "CREATE TABLE IF NOT EXISTS users (" +
-            "username VARCHAR(100) UNIQUE, " +
-            "password VARCHAR(255), " +
-            "email VARCHAR(100) UNIQUE)";
+            CREATE TABLE IF NOT EXISTS users (`username` VARCHAR(100) UNIQUE, `password` VARCHAR(255), `email` VARCHAR(100) UNIQUE)
             """
     };
 

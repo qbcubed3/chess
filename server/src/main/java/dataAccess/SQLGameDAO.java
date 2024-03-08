@@ -14,12 +14,7 @@ import java.util.ArrayList;
 public class SQLGameDAO {
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS games (" +
-            "whiteUsername VARCHAR(100), " +
-            "blackUsername VARCHAR(100), " +
-            "gameName VARCHAR(100), " +
-            "gameID INT AUTO_INCREMENT PRIMARY KEY, " +
-            "game VARCHAR(500))
+            CREATE TABLE IF NOT EXISTS games (`whiteUsername` varchar(100), `blackUsername` varchar(100), `gameName` varchar(100), `gameId` INT AUTO_INCREMENT PRIMARY KEY, `game` varchar(500))
             """
     };
     public SQLGameDAO() throws Exception{
