@@ -136,7 +136,6 @@ public class SQLGameDAO {
                     throw new UsernameTakenException("spot taken");
                 }
             }
-            if (playerColor == null){return;}
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, username);
             preparedStatement.setInt(2, gameId);
@@ -144,7 +143,7 @@ public class SQLGameDAO {
             conn.commit();
         }
         catch (SQLException | DataAccessException e){
-            throw new NullParameterException("no");
+            System.out.println(e.getMessage());
         }
     }
 }
