@@ -1,15 +1,9 @@
-package dataAccess.SQLDataAccess;
+package dataAccess;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
-import com.mysql.cj.xdevapi.JsonString;
-import dataAccess.DataAccessException;
-import dataAccess.SQLDataAccess.DatabaseManager;
-import dataAccess.NullParameterException;
-import dataAccess.UsernameTakenException;
 import model.GameDataModel;
 
-import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;

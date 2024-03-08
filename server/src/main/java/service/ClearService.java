@@ -1,7 +1,7 @@
 package service;
-import dataAccess.SQLDataAccess.SQLAuthDAO;
-import dataAccess.SQLDataAccess.SQLGameDAO;
-import dataAccess.SQLDataAccess.SQLUserDAO;
+import dataAccess.SQLAuthDAO;
+import dataAccess.SQLGameDAO;
+import dataAccess.SQLUserDAO;
 
 public class ClearService {
     public static void clearDatabase(){

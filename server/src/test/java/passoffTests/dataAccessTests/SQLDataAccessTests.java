@@ -1,8 +1,8 @@
 package passoffTests.dataAccessTests;
 
-import dataAccess.SQLDataAccess.SQLAuthDAO;
-import dataAccess.SQLDataAccess.SQLUserDAO;
-import dataAccess.SQLDataAccess.SQLGameDAO;
+import dataAccess.SQLAuthDAO;
+import dataAccess.SQLUserDAO;
+import dataAccess.SQLGameDAO;
 import model.UserDataModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

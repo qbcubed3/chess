@@ -1,12 +1,7 @@
-package dataAccess.SQLDataAccess;
-
-import dataAccess.DataAccessException;
-import dataAccess.SQLDataAccess.DatabaseManager;
-import dataAccess.UnauthorizedException;
+package dataAccess;
 
 import java.sql.SQLException;
 import java.util.Random;
-
 public class SQLAuthDAO {
     public SQLAuthDAO() throws Exception {
         configureDatabase();

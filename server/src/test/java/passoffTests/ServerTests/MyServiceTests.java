@@ -1,8 +1,8 @@
 package passoffTests.ServerTests;
 import chess.ChessGame;
-import dataAccess.SQLDataAccess.SQLAuthDAO;
-import dataAccess.SQLDataAccess.SQLGameDAO;
-import dataAccess.SQLDataAccess.SQLUserDAO;
+import dataAccess.SQLAuthDAO;
+import dataAccess.SQLGameDAO;
+import dataAccess.SQLUserDAO;
 import model.GameDataModel;
 import model.UserDataModel;
 import org.junit.jupiter.api.*;

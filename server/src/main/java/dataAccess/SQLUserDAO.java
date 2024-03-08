@@ -1,9 +1,5 @@
-package dataAccess.SQLDataAccess;
+package dataAccess;
 
-import dataAccess.DataAccessException;
-import dataAccess.SQLDataAccess.DatabaseManager;
-import dataAccess.UnauthorizedException;
-import dataAccess.UsernameTakenException;
 import model.UserDataModel;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
