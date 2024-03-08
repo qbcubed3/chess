@@ -117,13 +117,11 @@ public class SQLGameDAO {
         else if (playerColor.equals("BLACK")){
             statement = "UPDATE games SET blackUsername = ? WHERE gameID = ?";
         }
-        else{
-            return;
-        }
         try{
             var conn = DatabaseManager.getConnection();
             conn.setAutoCommit(false);
             var preparedGame = conn.prepareStatement(gameCheck);
+            preparedGame.setInt(1, gameId);
             var gameid = preparedGame.executeQuery();
             if (!gameid.next()){
                 throw new NullParameterException("bad id");
@@ -138,6 +136,7 @@ public class SQLGameDAO {
                     throw new UsernameTakenException("spot taken");
                 }
             }
+            if (playerColor == null){return;}
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, username);
             preparedStatement.setInt(2, gameId);

@@ -17,6 +17,7 @@ public class UserService {
     }
 
     public static String loginUser(String username, String password) throws UnauthorizedException, NullParameterException {
+        System.out.println("username: " + username + " password: " + password);
         String user = "";
         String auth = "";
         if (!username.isEmpty() && !password.isEmpty()){

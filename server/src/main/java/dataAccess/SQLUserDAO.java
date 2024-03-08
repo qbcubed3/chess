@@ -82,29 +82,24 @@ public class SQLUserDAO {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         var checkStatement = "SELECT username FROM users WHERE username = ?";
         var statement = "SELECT password FROM users WHERE username = ?";
-        try(var conn = DatabaseManager.getConnection()){
+        try(var conn = DatabaseManager.getConnection()) {
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, username);
-            try{
-                var result = preparedStatement.executeQuery();
-                if (result.next()){
-                    var getPass = result.getString(1);
-                    if(encoder.matches(password, getPass)){
-                        return username;
-                    }
-                    else{
-                        throw new UnauthorizedException("password/username bad");
-                    }
+            var result = preparedStatement.executeQuery();
+            if (result.next()) {
+                var getPass = result.getString(1);
+                if (encoder.matches(password, getPass)) {
+                    return username;
+                } else {
+                    throw new UnauthorizedException("password/username bad");
                 }
-            }
-            catch (Exception e){
-                throw new UnauthorizedException("not found");
+            } else {
+                throw new UnauthorizedException("bad");
             }
         }
         catch (Exception e){
-            throw new UnauthorizedException("username bad");
+            throw new UnauthorizedException("bad");
         }
-        return null;
     }
 
     public static UserDataModel getUser(String username){
