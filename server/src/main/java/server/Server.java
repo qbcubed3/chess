@@ -1,8 +1,5 @@
 package server;
 
-import dataAccess.SQLAuthDAO;
-import dataAccess.SQLGameDAO;
-import dataAccess.SQLUserDAO;
 import handlers.ClearServiceHandler;
 import handlers.GameServiceHandler;
 import handlers.UserServiceHandler;

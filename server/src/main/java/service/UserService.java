@@ -1,7 +1,8 @@
 package service;
 
 import dataAccess.*;
-import model.AuthDataModel;
+import dataAccess.SQLDataAccess.SQLAuthDAO;
+import dataAccess.SQLDataAccess.SQLUserDAO;
 import model.UserDataModel;
 
 public class UserService {

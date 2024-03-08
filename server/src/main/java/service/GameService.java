@@ -1,6 +1,8 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.SQLDataAccess.SQLAuthDAO;
+import dataAccess.SQLDataAccess.SQLGameDAO;
 import model.GameDataModel;
 
 import java.util.ArrayList;

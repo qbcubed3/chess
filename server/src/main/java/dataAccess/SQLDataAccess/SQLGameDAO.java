@@ -1,8 +1,12 @@
-package dataAccess;
+package dataAccess.SQLDataAccess;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
 import com.mysql.cj.xdevapi.JsonString;
+import dataAccess.DataAccessException;
+import dataAccess.SQLDataAccess.DatabaseManager;
+import dataAccess.NullParameterException;
+import dataAccess.UsernameTakenException;
 import model.GameDataModel;
 
 import javax.xml.crypto.Data;
@@ -110,7 +114,7 @@ public class SQLGameDAO {
         return finalLength;
     }
 
-    public static void joinGame(int gameId, String playerColor, String username) throws UsernameTakenException, NullParameterException{
+    public static void joinGame(int gameId, String playerColor, String username) throws UsernameTakenException, NullParameterException {
         var statement = "";
         var checkStatement = "SELECT whiteUsername, blackUsername FROM games WHERE gameID = ?";
         var gameCheck = "SELECT * FROM games WHERE gameID = ?";

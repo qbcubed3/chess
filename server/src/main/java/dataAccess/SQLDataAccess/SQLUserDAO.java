@@ -1,5 +1,9 @@
-package dataAccess;
+package dataAccess.SQLDataAccess;
 
+import dataAccess.DataAccessException;
+import dataAccess.SQLDataAccess.DatabaseManager;
+import dataAccess.UnauthorizedException;
+import dataAccess.UsernameTakenException;
 import model.UserDataModel;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -40,7 +44,7 @@ public class SQLUserDAO {
             System.out.println(e.getMessage());
         }
     }
-    public static void registerUser(UserDataModel user) throws UsernameTakenException{
+    public static void registerUser(UserDataModel user) throws UsernameTakenException {
         String username = user.username();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPass = encoder.encode(user.password());
@@ -86,7 +90,7 @@ public class SQLUserDAO {
         return finalLength;
     }
 
-    public static String getAuth(String username, String password) throws UnauthorizedException{
+    public static String getAuth(String username, String password) throws UnauthorizedException {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         var checkStatement = "SELECT username FROM users WHERE username = ?";
         var statement = "SELECT password FROM users WHERE username = ?";

@@ -1,4 +1,8 @@
-package dataAccess;
+package dataAccess.SQLDataAccess;
+
+import dataAccess.DataAccessException;
+import dataAccess.SQLDataAccess.DatabaseManager;
+import dataAccess.UnauthorizedException;
 
 import java.sql.SQLException;
 import java.util.Random;
@@ -74,7 +78,7 @@ public class SQLAuthDAO {
         return finalLength;
     }
 
-    public static boolean checkAuth(String auth) throws UnauthorizedException{
+    public static boolean checkAuth(String auth) throws UnauthorizedException {
         var statement = "SELECT username FROM auths WHERE auth = ?";
         try{
             var conn = DatabaseManager.getConnection();
