@@ -8,20 +8,29 @@ import java.sql.*;
 
 public class SQLUserDAO {
 
-    public SQLUserDAO() {
-        try{
-            DatabaseManager.createDatabase();
-            var conn = DatabaseManager.getConnection();
-            var statement = "CREATE TABLE IF NOT EXISTS users (" +
-                    "username VARCHAR(100) UNIQUE, " +
-                    "password VARCHAR(255), " +
-                    "email VARCHAR(100) UNIQUE)";
-            var preparedStatement = conn.prepareStatement(statement);
-            preparedStatement.executeUpdate();
+    private final String[] createStatements = {
+            """
+            "CREATE TABLE IF NOT EXISTS users (" +
+            "username VARCHAR(100) UNIQUE, " +
+            "password VARCHAR(255), " +
+            "email VARCHAR(100) UNIQUE)";
+            """
+    };
+
+    private void configureDatabase() throws Exception {
+        DatabaseManager.createDatabase();
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new Exception(ex.getMessage());
         }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+    }
+    public SQLUserDAO() throws Exception{
+        configureDatabase();
     }
 
     public static void clearUsers(){

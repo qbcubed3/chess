@@ -4,13 +4,27 @@ import java.sql.SQLException;
 import java.util.Random;
 
 public class SQLAuthDAO {
-    public SQLAuthDAO() {
-        try{
-            DatabaseManager.createDatabase();
-            var conn = DatabaseManager.getConnection();
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
+    public SQLAuthDAO() throws Exception {
+        configureDatabase();
+    }
+
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS auths(" +
+            username VARCHAR(100), " +
+            auth VARCHAR(155))" +
+            """
+    };
+    private void configureDatabase() throws Exception {
+        DatabaseManager.createDatabase();
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new Exception(ex.getMessage());
         }
     }
     public static void clearAuths(){

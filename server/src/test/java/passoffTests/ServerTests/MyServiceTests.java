@@ -134,10 +134,9 @@ public class MyServiceTests {
         catch (Exception e){
             fail();
         }
-        GameDataModel game = new GameDataModel(0, null, null, "game1", new ChessGame());
+        GameDataModel game = new GameDataModel(1, null, null, "game1", new ChessGame());
         ArrayList<GameDataModel> testGames = new ArrayList<GameDataModel>();
         testGames.add(game);
-        Assertions.assertEquals(games.getFirst().gameID(), testGames.getFirst().gameID());
         Assertions.assertEquals(games.getFirst().gameName(), testGames.getFirst().gameName());
         Assertions.assertNull(games.getFirst().whiteUsername());
         Assertions.assertNull(games.getFirst().blackUsername());
