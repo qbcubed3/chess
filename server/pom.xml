@@ -113,11 +113,6 @@
             <artifactId>jsoup</artifactId>
             <version>1.14.3</version> <!-- Use the latest version available -->
         </dependency>
-        <dependency>
-            <groupId>org.mindrot.bcrypt</groupId>
-            <artifactId>bcrypt</artifactId>
-            <version>0.3</version>
-        </dependency>
     </dependencies>
 
 
