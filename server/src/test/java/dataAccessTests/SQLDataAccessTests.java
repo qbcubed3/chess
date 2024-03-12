@@ -260,4 +260,16 @@ public class SQLDataAccessTests {
             Assertions.assertEquals(2, 2);
         }
     }
+    @Test
+    public void testJoinGameTwo(){
+        ClearService.clearDatabase();
+        try{
+            int id = SQLGameDAO.createGame("game");
+            SQLGameDAO.joinGame(3002, "WHITE", "whiteUser");
+            fail();
+        }
+        catch (Exception e){
+            Assertions.assertEquals(2, 2);
+        }
+    }
 }
