@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SQLGameDAO {
-    private final String[] createStatements = {
+    private static final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS games (`whiteUsername` varchar(100), `blackUsername` varchar(100), `gameName` varchar(100), `gameId` INT AUTO_INCREMENT PRIMARY KEY, `game` varchar(500))
             """
@@ -19,7 +19,7 @@ public class SQLGameDAO {
        configureDatabase();
     }
 
-    private void configureDatabase() throws Exception {
+    private static void configureDatabase() throws Exception {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createStatements) {
@@ -32,6 +32,10 @@ public class SQLGameDAO {
         }
     }
     public static void clearGame(){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var statement = "DELETE from games";
         try{
             var conn = DatabaseManager.getConnection();
@@ -43,6 +47,10 @@ public class SQLGameDAO {
         }
     }
     public static ArrayList<GameDataModel> getGames(){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         ArrayList<GameDataModel> gameList = new ArrayList<GameDataModel>();
         var statement = "SELECT * FROM games";
         Gson gson = new Gson();
@@ -66,6 +74,10 @@ public class SQLGameDAO {
         return gameList;
     }
     public static int createGame(String gameName){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var statement = "INSERT INTO games (whiteUsername, blackUsername, gameName, game) VALUES(?,?,?,?)";
         ChessGame game = new ChessGame();
         Gson gson = new Gson();
@@ -93,6 +105,10 @@ public class SQLGameDAO {
     }
 
     public static int length(){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         int finalLength = 0;
         var statement = "SELECT COUNT(*) AS table_length FROM games";
         try (var conn = DatabaseManager.getConnection()){
@@ -109,6 +125,10 @@ public class SQLGameDAO {
     }
 
     public static void joinGame(int gameId, String playerColor, String username) throws UsernameTakenException, NullParameterException {
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var statement = "";
         var checkStatement = "SELECT whiteUsername, blackUsername FROM games WHERE gameID = ?";
         var gameCheck = "SELECT * FROM games WHERE gameID = ?";

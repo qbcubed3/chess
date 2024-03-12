@@ -7,12 +7,12 @@ public class SQLAuthDAO {
         configureDatabase();
     }
 
-    private final String[] createStatements = {
+    private static final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS auths (`username` VARCHAR(100), `auth` VARCHAR(155))
             """
     };
-    private void configureDatabase() throws Exception {
+    private static void configureDatabase() throws Exception {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createStatements) {
@@ -25,6 +25,10 @@ public class SQLAuthDAO {
         }
     }
     public static void clearAuths(){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var statement = "DELETE FROM auths";
         try( var conn = DatabaseManager.getConnection()){
             var preparedStatement = conn.prepareStatement(statement);
@@ -34,7 +38,11 @@ public class SQLAuthDAO {
             System.out.println(e.getMessage());
         }
     }
-    public static String addAuth(String username){
+    public static String addAuth(String username) {
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         StringBuilder auth = new StringBuilder();
         Random random = new Random();
         String validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVWXYZ1234567890";
@@ -58,6 +66,10 @@ public class SQLAuthDAO {
     }
 
     public static int length(){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         int finalLength = 0;
         var statement = "SELECT COUNT(*) AS table_length FROM auths";
         try (var conn = DatabaseManager.getConnection()){
@@ -74,6 +86,10 @@ public class SQLAuthDAO {
     }
 
     public static boolean checkAuth(String auth) throws UnauthorizedException {
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var statement = "SELECT username FROM auths WHERE auth = ?";
         try{
             var conn = DatabaseManager.getConnection();
@@ -95,6 +111,10 @@ public class SQLAuthDAO {
     }
 
     public static String removeUsername(String auth) throws UnauthorizedException{
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var statement = "DELETE FROM auths WHERE auth = ?";
         var checkStatement = "SELECT username FROM auths WHERE auth = ?";
         try{
@@ -120,6 +140,10 @@ public class SQLAuthDAO {
     }
 
     public static String getUsername(String auth) throws UnauthorizedException {
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         String username = "";
         var statement = "SELECT username FROM auths WHERE auth = ?";
         try{

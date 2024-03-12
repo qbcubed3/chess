@@ -8,13 +8,13 @@ import java.sql.*;
 
 public class SQLUserDAO {
 
-    private final String[] createStatements = {
+    private static final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS users (`username` VARCHAR(100) UNIQUE, `password` VARCHAR(255), `email` VARCHAR(100) UNIQUE)
             """
     };
 
-    private void configureDatabase() throws Exception {
+    private static void configureDatabase() throws Exception {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createStatements) {
@@ -31,6 +31,10 @@ public class SQLUserDAO {
     }
 
     public static void clearUsers(){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var statement = "DELETE FROM users";
         try( var conn = DatabaseManager.getConnection()){
             var preparedStatement = conn.prepareStatement(statement);
@@ -41,6 +45,10 @@ public class SQLUserDAO {
         }
     }
     public static void registerUser(UserDataModel user) throws UsernameTakenException {
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         String username = user.username();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPass = encoder.encode(user.password());
@@ -71,6 +79,10 @@ public class SQLUserDAO {
     }
 
     public static int length(){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         int finalLength = 0;
         var statement = "SELECT COUNT(*) AS table_length FROM users";
         try (var conn = DatabaseManager.getConnection()){
@@ -87,6 +99,10 @@ public class SQLUserDAO {
     }
 
     public static String getAuth(String username, String password) throws UnauthorizedException {
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         var checkStatement = "SELECT username FROM users WHERE username = ?";
         var statement = "SELECT password FROM users WHERE username = ?";
@@ -111,6 +127,10 @@ public class SQLUserDAO {
     }
 
     public static UserDataModel getUser(String username){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
         var select = "SELECT username, password, email FROM users WHERE username = ?";
         try (var conn = DatabaseManager.getConnection()){
             var preparedStatement = conn.prepareStatement(select);
