@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import model.AuthDataModel;
 import model.GameDataModel;
 import model.JoinGameModel;
@@ -46,14 +47,15 @@ public class ServerFacade {
         return this.makeRequest("GET", path, null, games.getClass());
     }
 
-    public void create(String name) throws Exception {
+    public int create(String name) throws Exception {
         var path = "/game";
-        this.makeRequest("POST", path, name, null);
+        var id = this.makeRequest("POST", path, name, JsonObject.class);
+        return id.get("gameID").getAsInt();
     }
-    public String join(String playerColor, int gameID) throws Exception{
+    public void join(String playerColor, int gameID) throws Exception{
         var path = "/game";
         var data = new JoinGameModel(playerColor, gameID);
-        return this.makeRequest("PUT", path, data, String.class);
+        this.makeRequest("PUT", path, data, null);
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {

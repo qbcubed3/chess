@@ -127,4 +127,28 @@ public class ServerFacadeTests {
             Assertions.assertEquals(2, 2);
         }
     }
+    @Test
+    public void testJoin(){
+        try{
+            ClearService.clearDatabase();
+            facade.register("user", "pass", "email");
+            int id = facade.create("game");
+            facade.join("WHITE", id);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            fail();
+        }
+    }
+    @Test
+    public void testBadJoin(){
+        try{
+            ClearService.clearDatabase();
+            facade.join("WHITE", 123456789);
+            fail();
+        }
+        catch (Exception e){
+            Assertions.assertEquals(2, 2);
+        }
+    }
 }
