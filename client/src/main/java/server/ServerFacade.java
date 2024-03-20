@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import model.AuthDataModel;
 import model.GameDataModel;
+import model.JoinGameModel;
 import model.UserDataModel;
 
 import java.io.*;
@@ -49,7 +50,11 @@ public class ServerFacade {
         var path = "/game";
         this.makeRequest("POST", path, name, null);
     }
-    public void join()
+    public String join(String playerColor, int gameID) throws Exception{
+        var path = "/game";
+        var data = new JoinGameModel(playerColor, gameID);
+        return this.makeRequest("PUT", path, data, String.class);
+    }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
         try {
