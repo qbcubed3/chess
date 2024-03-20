@@ -53,9 +53,7 @@ public class GameServiceHandler {
         try{
             int gameId = GameService.createGame(auth, gameName);
             response.status(200);
-            var thing = "{ \"gameID\":" + gameId +  "}";
-            System.out.println(thing.getClass());
-            return thing;
+            return "{ \"gameID\":" + gameId +  "}";
         }
         catch (NullParameterException e){
             response.status(400);

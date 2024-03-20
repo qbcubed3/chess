@@ -151,4 +151,31 @@ public class ServerFacadeTests {
             Assertions.assertEquals(2, 2);
         }
     }
+    @Test
+    public void testList(){
+        try{
+            ClearService.clearDatabase();
+            facade.register("user2", "pass", "email");
+            facade.create("game");
+            facade.create("game2");
+            var games = facade.list();
+            System.out.println(games);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            fail();
+        }
+    }
+    @Test
+    public void testBadList(){
+        try{
+            ClearService.clearDatabase();
+            facade.logout();
+            facade.list();
+            fail();
+        }
+        catch (Exception e){
+            Assertions.assertTrue(true);
+        }
+    }
 }
