@@ -25,12 +25,9 @@ public class GameServiceHandler {
         String auth = gson.fromJson(request.headers("authorization"), String.class);
         try{
             ArrayList<GameDataModel> games = GameService.listGames(auth);
-            System.out.println(games);
             StringBuilder finalJson = new StringBuilder(gson.toJson(games));
-            System.out.println(finalJson.toString());
             finalJson.insert(0, "{ \"games\": ");
             finalJson.append("}");
-            System.out.println(finalJson.toString());
             return finalJson.toString();
         }
         catch (UnauthorizedException e) {
@@ -47,7 +44,7 @@ public class GameServiceHandler {
         String auth = gson.fromJson(request.headers("authorization"), String.class);
         String gameName;
         try{
-            gameName = jsonElement.getAsJsonObject().get("gameName").getAsString();
+            gameName = name;
         }
         catch (Exception e){
             response.status(400);

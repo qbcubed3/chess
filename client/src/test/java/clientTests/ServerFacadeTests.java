@@ -1,6 +1,7 @@
 package clientTests;
 
 import dataAccess.SQLAuthDAO;
+import dataAccess.SQLGameDAO;
 import dataAccess.SQLUserDAO;
 import org.junit.jupiter.api.*;
 import server.Server;
@@ -46,6 +47,7 @@ public class ServerFacadeTests {
     public void badRegisterTest(){
         try{
             ClearService.clearDatabase();
+            facade.logout();
             var auth = facade.register("", "k", "email");
             fail();
         }
@@ -57,6 +59,7 @@ public class ServerFacadeTests {
     public void loginTest(){
         try{
             ClearService.clearDatabase();
+            facade.logout();
             facade.register("user", "pass", "email");
             var auth = facade.login("user", "pass");
             Assertions.assertNotNull(auth);
@@ -69,6 +72,7 @@ public class ServerFacadeTests {
     public void badLoginTest(){
         try{
             ClearService.clearDatabase();
+            facade.logout();
             facade.register("user", "pass", "email");
             var auth = facade.login("newguy", "huh");
             fail();
@@ -81,6 +85,7 @@ public class ServerFacadeTests {
     public void logoutTest(){
         try{
             ClearService.clearDatabase();
+            facade.logout();
             var auth = facade.register("user", "pass", "email");
             var auth2 = facade.logout();
             Assertions.assertEquals(auth.authToken(), auth2.authToken());
@@ -100,5 +105,29 @@ public class ServerFacadeTests {
             Assertions.assertEquals(2, 2);
         }
     }
-
+    @Test
+    public void testCreate(){
+        try{
+            ClearService.clearDatabase();
+            facade.logout();
+            facade.register("user", "pass", "email");
+            facade.create("game");
+            Assertions.assertEquals(SQLGameDAO.length(), 1);
+        }
+        catch (Exception e){
+            fail();
+        }
+    }
+    @Test
+    public void testBadCreate(){
+        try{
+            ClearService.clearDatabase();
+            facade.logout();
+            facade.create("game");
+            fail();
+        }
+        catch (Exception e){
+            Assertions.assertEquals(2, 2);
+        }
+    }
 }

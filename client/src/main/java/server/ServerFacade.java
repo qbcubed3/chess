@@ -2,10 +2,12 @@ package server;
 
 import com.google.gson.Gson;
 import model.AuthDataModel;
+import model.GameDataModel;
 import model.UserDataModel;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class ServerFacade {
     private final String serverUrl;
@@ -37,7 +39,19 @@ public class ServerFacade {
 
     public AuthDataModel logout() throws Exception{
         var path = "/session";
-        return this.makeRequest("DELETE", path, null, AuthDataModel.class);
+        var auth = this.makeRequest("DELETE", path, null, AuthDataModel.class);
+        if (authToken != null){authToken = null;}
+        return auth;
+    }
+    public ArrayList<GameDataModel> list() throws Exception {
+        var path = "/game";
+        var games = new ArrayList<GameDataModel>();
+        return this.makeRequest("GET", path, null, games.getClass());
+    }
+
+    public void create(String name) throws Exception {
+        var path = "/game";
+        this.makeRequest("POST", path, name, null);
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
