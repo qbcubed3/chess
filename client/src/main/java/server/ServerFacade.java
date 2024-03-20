@@ -20,14 +20,20 @@ public class ServerFacade {
         var user = new UserDataModel(username, password, email);
         var auth = this.makeRequest("POST", path, user, AuthDataModel.class);
         if (auth != null) {
-            authToken = auth.authToken();
+            this.authToken = auth.authToken();
         } else {
             throw new Exception("invalid");
         }
         return auth;
     }
 
-    public AuthDataModel login()
+    public AuthDataModel login(String username, String password) throws Exception{
+        var path = "/session";
+        var user = new UserDataModel(username, password, null);
+        var auth = this.makeRequest("POST", path, user, AuthDataModel.class);
+        this.authToken = auth.authToken();
+        return auth;
+    }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
         try {

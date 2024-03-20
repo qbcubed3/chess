@@ -46,9 +46,34 @@ public class ServerFacadeTests {
         try{
             ClearService.clearDatabase();
             var auth = facade.register("", "k", "email");
+            fail();
         }
         catch (Exception e){
             Assertions.assertEquals(2, 2);
+        }
+    }
+    @Test
+    public void loginTest(){
+        try{
+            ClearService.clearDatabase();
+            facade.register("user", "pass", "email");
+            var auth = facade.login("user", "pass");
+            Assertions.assertNotNull(auth);
+        }
+        catch (Exception e){
+            fail();
+        }
+    }
+    @Test
+    public void badLoginTest(){
+        try{
+            ClearService.clearDatabase();
+            facade.register("user", "pass", "email");
+            var auth = facade.login("newguy", "huh");
+            fail();
+        }
+        catch (Exception e){
+            Assertions.assertEquals(2,2);
         }
     }
 
