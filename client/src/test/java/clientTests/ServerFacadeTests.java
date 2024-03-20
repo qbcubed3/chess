@@ -1,5 +1,6 @@
 package clientTests;
 
+import dataAccess.SQLAuthDAO;
 import dataAccess.SQLUserDAO;
 import org.junit.jupiter.api.*;
 import server.Server;
@@ -74,6 +75,29 @@ public class ServerFacadeTests {
         }
         catch (Exception e){
             Assertions.assertEquals(2,2);
+        }
+    }
+    @Test
+    public void logoutTest(){
+        try{
+            ClearService.clearDatabase();
+            var auth = facade.register("user", "pass", "email");
+            var auth2 = facade.logout();
+            Assertions.assertEquals(auth.authToken(), auth2.authToken());
+        }
+        catch (Exception e){
+            fail();
+        }
+    }
+    @Test
+    public void badLogoutTest(){
+        try{
+            ClearService.clearDatabase();
+            var auth = facade.logout();
+            fail();
+        }
+        catch (Exception e){
+            Assertions.assertEquals(2, 2);
         }
     }
 

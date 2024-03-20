@@ -35,12 +35,18 @@ public class ServerFacade {
         return auth;
     }
 
+    public AuthDataModel logout() throws Exception{
+        var path = "/session";
+        return this.makeRequest("DELETE", path, null, AuthDataModel.class);
+    }
+
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
+            if (authToken != null){http.setRequestProperty("authorization", authToken);}
 
             writeBody(request, http);
             http.connect();
