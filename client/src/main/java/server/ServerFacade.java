@@ -21,11 +21,7 @@ public class ServerFacade {
         var path = "/user";
         var user = new UserDataModel(username, password, email);
         var auth = this.makeRequest("POST", path, user, AuthDataModel.class);
-        if (auth != null) {
-            this.authToken = auth.authToken();
-        } else {
-            throw new Exception("invalid");
-        }
+        this.authToken = auth.authToken();
         return auth;
     }
 
@@ -53,6 +49,7 @@ public class ServerFacade {
         var path = "/game";
         this.makeRequest("POST", path, name, null);
     }
+    public void join()
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
         try {
