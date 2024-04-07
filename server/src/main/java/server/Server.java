@@ -3,12 +3,18 @@ package server;
 import handlers.ClearServiceHandler;
 import handlers.GameServiceHandler;
 import handlers.UserServiceHandler;
+import server.WebSocket.WebSocketHandler;
 import spark.*;
+
+import java.net.http.WebSocket;
 
 public class Server {
     public int run(int desiredPort){
         Spark.port(desiredPort);
         Spark.staticFiles.location("/web");
+
+        Spark.webSocket("/connect", new WebSocketHandler());
+
         Spark.delete("/db", ClearServiceHandler::callClearService);
         Spark.post("/user", UserServiceHandler::callRegisterService);
         Spark.post("/session", UserServiceHandler::callLoginService);
