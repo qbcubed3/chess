@@ -39,15 +39,31 @@ public class WebSocketFacade extends Endpoint {
     public void parseMessage(String message){
         UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
         switch(command.getCommandType()){
-            case JOIN_OBSERVER ->
+            case JOIN_OBSERVER -> joinObserver(command);
+            case JOIN_PLAYER -> joinPlayer(command);
+            case LEAVE -> leave(command);
+            case RESIGN -> resign(command);
+            case MAKE_MOVE -> makeMove(command);
         }
     }
 
-    public void joinObserver(){
+    public void joinObserver(UserGameCommand command){
         return;
     }
 
-    public void joinPlayer(){
+    public void joinPlayer(UserGameCommand command){
+        return;
+    }
+
+    public void makeMove(UserGameCommand command) {
+        return;
+    }
+
+    public void leave(UserGameCommand command){
+        return;
+    }
+
+    public void resign(UserGameCommand command){
         return;
     }
 }
