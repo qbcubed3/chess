@@ -36,4 +36,14 @@ public class ConnectionManager {
         }
 
     }
+
+    public void broadcastOne(String name, ServerMessage message) throws IOException {
+        for (var c: connections.values()) {
+            if (c.session.isOpen()) {
+                if (c.name.equals(name)) {
+                    c.send(message.toString());
+                }
+            }
+        }
+    }
 }

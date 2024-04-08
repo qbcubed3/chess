@@ -11,8 +11,13 @@ public class WebSocketHandler {
 
     public void onMessage(Session session, String message) throws IOException {
         ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
-        switch (serverMessage.getServerMessageType()){
-            case LOAD_GAME ->
+        switch (serverMessage.getServerMessageType()) {
+            case LOAD_GAME -> throw new IOException();
+            case ERROR -> throw new IOException();
+            case NOTIFICATION -> throw new IOException();
+
         }
+    }
+
 
 }
