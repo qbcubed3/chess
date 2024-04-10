@@ -86,7 +86,6 @@ public class WebSocketTests {
         //check received message
         assertLoadGameMessage(messages.get(white.user));
 
-
         //join other spot on game
         messages = joinPlayer(black.user, black.authToken, gameID, ChessGame.TeamColor.BLACK,
                 Set.of(white.user), Set.of());

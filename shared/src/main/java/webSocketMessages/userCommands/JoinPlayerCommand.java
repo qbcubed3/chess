@@ -3,21 +3,21 @@ package webSocketMessages.userCommands;
 import chess.ChessGame;
 
 public class JoinPlayerCommand extends UserGameCommand{
-    int gameId;
-    ChessGame.TeamColor color;
+    int gameID;
+    ChessGame.TeamColor playerColor;
 
     public JoinPlayerCommand(String auth, int id, ChessGame.TeamColor color){
         super(auth);
         this.commandType = CommandType.JOIN_PLAYER;
-        this.gameId = id;
-        this.color = color;
+        this.gameID = id;
+        this.playerColor = color;
     }
 
     public int getId(){
-        return gameId;
+        return gameID;
     }
 
     public ChessGame.TeamColor getColor(){
-        return color;
+        return playerColor;
     }
 }

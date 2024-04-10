@@ -5,45 +5,45 @@ import webSocketMessages.serverMessages.ServerMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
-    public final ConcurrentHashMap<Integer, Connection> connections = new ConcurrentHashMap<>();
+    public final HashMap<String, Connection> connections = new HashMap<>();
 
-    public void add(int id, Session session) {
-        var conn = new Connection(id, session);
-        connections.put(id, conn);
+    public void add(String user, Connection conn) {
+        connections.put(user, conn);
     }
 
-    public void remove(int id){
-        connections.remove(id);
+    public Connection getConn(String user) {
+        return connections.get(user);
     }
 
-    public void broadcast(int id, ServerMessage message ) throws IOException {
-        var toRemove = new ArrayList<Connection>();
-        for (var c: connections.values()){
-            if (c.session.isOpen()) {
-                if (!(c.id == id)) {
-                    c.send(message.toString());
-                }
-            } else{
-                toRemove.add(c);
-            }
-        }
-
-        for (var c: toRemove) {
-            connections.remove(c.id);
-        }
-
+    public void remove(String user){
+        connections.remove(user);
     }
 
-    public void broadcastOne(int id, ServerMessage message) throws IOException {
-        for (var c: connections.values()) {
-            if (c.session.isOpen()) {
-                if (c.id == id) {
-                    c.send(message.toString());
+    public void broadcast(String user, int id, ServerMessage message ) throws IOException {
+        for (Map.Entry<String, Connection> c: connections.entrySet()) {
+            String tempUser = c.getKey();
+            Connection connection = c.getValue();
+            if (!(tempUser.equals(user))) {
+                if (connection.id == id){
+                    connection.send(message.toString());
                 }
             }
         }
     }
+
+//    public void broadcastOne(int id, ServerMessage message) throws IOException {
+//        System.out.println(connections);
+//        for (var c: connections.values()) {
+//            if (c.session.isOpen()) {
+//                if (c.user.equals(id)) {
+//                    c.send(message.toString());
+//                }
+//            }
+//        }
+//    }
 }
