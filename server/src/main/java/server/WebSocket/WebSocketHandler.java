@@ -183,7 +183,7 @@ public class WebSocketHandler {
     }
 
     public void leave(JoinObserverCommand command, Connection conn) throws IOException {
-        System.out.println("leaving uh oh");
+
         var gameId = command.getId();
     }
 
@@ -193,6 +193,17 @@ public class WebSocketHandler {
             var user = SQLAuthDAO.getUsername(auth);
             Notification notif = new Notification(user + " resigned");
             var gameId = command.getId();
+            var game = SQLGameDAO.getGame(gameId);
+            if (!goodGames.get(gameId)){
+                ErrorMessage message = new ErrorMessage("can't resign when game is already over");
+                conn.send(message.toString());
+                return;
+            }
+            if (!(game.whiteUsername().equals(user)) && !(game.blackUsername().equals(user))){
+                ErrorMessage message = new ErrorMessage("observers cant resign");
+                conn.send(message.toString());
+                return;
+            }
             goodGames.replace(gameId, false);
             conn.send(notif.toString());
             connections.broadcast(user, gameId, notif);
