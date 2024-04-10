@@ -68,6 +68,30 @@ public class SQLGameDAO {
         }
     }
 
+    public static void updateUser(int gameId, ChessGame.TeamColor color){
+        try{
+            configureDatabase();
+        }
+        catch (Exception e){System.out.println(e.getMessage());}
+        try{
+            var statement = "";
+            if (color == ChessGame.TeamColor.BLACK) {
+                statement = "UPDATE games SET blackUsername = ? WHERE gameID = ?";
+            }
+            else if (color == ChessGame.TeamColor.WHITE) {
+                statement = "UPDATE games SET whiteUsername = ? WHERE gameID = ?";
+            }
+            var conn = DatabaseManager.getConnection();
+            var preparedStatement = conn.prepareStatement(statement);
+            preparedStatement.setString(1, null);
+            preparedStatement.setInt(2, gameId);
+            preparedStatement.executeUpdate();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static ArrayList<GameDataModel> getGames(){
         try{
             configureDatabase();

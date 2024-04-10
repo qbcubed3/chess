@@ -182,9 +182,27 @@ public class WebSocketHandler {
         }
     }
 
-    public void leave(JoinObserverCommand command, Connection conn) throws IOException {
-
-        var gameId = command.getId();
+    public void leave(JoinObserverCommand command, Connection conn) throws IOException, UnauthorizedException {
+        try {
+            var gameId = command.getId();
+            var auth = command.getAuthString();
+            var user = SQLAuthDAO.getUsername(auth);
+            var game = SQLGameDAO.getGame(gameId);
+            if (user.equals(game.blackUsername())) {
+                SQLGameDAO.updateUser( gameId, ChessGame.TeamColor.BLACK);
+            }
+            else if (user.equals(game.whiteUsername())){
+                SQLGameDAO.updateUser(gameId, ChessGame.TeamColor.WHITE);
+            }
+            Notification notif = new Notification("player left the game");
+            conn.send(notif.toString());
+            connections.broadcast(user, gameId, notif);
+            connections.remove(user);
+        }
+        catch (Exception e){
+            ErrorMessage message = new ErrorMessage("something happened");
+            conn.send(message.toString());
+        }
     }
 
     public void resign(JoinObserverCommand command, Connection conn) throws IOException {
