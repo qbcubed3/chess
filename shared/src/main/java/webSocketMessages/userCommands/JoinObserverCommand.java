@@ -9,4 +9,8 @@ public class JoinObserverCommand extends UserGameCommand{
         this.commandType = type;
         this.gameId = id;
     }
+
+    public int getId(){
+        return gameId;
+    }
 }

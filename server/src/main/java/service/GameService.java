@@ -15,6 +15,13 @@ public class GameService {
         return SQLGameDAO.getGames();
     }
 
+    public static GameDataModel getGame(String auth, int id) throws UnauthorizedException {
+        if (!SQLAuthDAO.checkAuth(auth)) {
+            throw new UnauthorizedException("auth Token doesn't exist");
+        }
+        return SQLGameDAO.getGame(id);
+    }
+
     public static int createGame(String auth, String gameName) throws UnauthorizedException, NullParameterException{
         if (!SQLAuthDAO.checkAuth(auth)){
             throw new UnauthorizedException("auth Token doesn't exist");
@@ -33,4 +40,6 @@ public class GameService {
         String username = SQLAuthDAO.getUsername(auth);
         SQLGameDAO.joinGame(gameId, playerColor, username);
     }
+
+
 }

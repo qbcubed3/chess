@@ -73,6 +73,37 @@ public class SQLGameDAO {
         }
         return gameList;
     }
+    public static GameDataModel getGame(int id){
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
+        GameDataModel model = new GameDataModel(0, null, null, null, null);
+        var statement = "SELECT * FROM games WHERE gameID = ?";
+        Gson gson = new Gson();
+        try{
+            var conn = DatabaseManager.getConnection();
+            var prepStatement = conn.prepareStatement(statement);
+            prepStatement.setInt(1, id);
+            ResultSet result = prepStatement.executeQuery();
+            if (result.next()){
+                var whiteUsername = result.getString(1);
+                var blackUsername = result.getString(2);
+                var gameName = result.getString(3);
+                var gameID = result.getInt(4);
+                var gameJson = result.getString(5);
+                model = new GameDataModel(gameID, whiteUsername, blackUsername, gameName, gson.fromJson(gameJson, ChessGame.class));
+            }
+            else {
+                throw new DataAccessException("Couldn't find the game ID");
+            }
+        }
+        catch (SQLException | DataAccessException e){
+            System.out.println(e.getMessage());
+        }
+        return model;
+    }
+
     public static int createGame(String gameName){
         try{
             configureDatabase();
@@ -162,6 +193,29 @@ public class SQLGameDAO {
             preparedStatement.setInt(2, gameId);
             preparedStatement.executeUpdate();
             conn.commit();
+        }
+        catch (SQLException | DataAccessException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void leaveGame(int id, String color) throws UsernameTakenException, NullParameterException {
+        try{
+            configureDatabase();
+        }
+        catch(Exception e){System.out.println(e.getMessage());}
+        var gamesCheck = "SELECT * FROM games WHERE gameID = ?";
+        String statement = "";
+        if (color.equals("WHITE")){
+            statement = "UPDATE games SET whiteUsername = ? WHERE gameID = ?";
+        }
+        else if (color.equals("BLACK")){
+            statement = "UPDATE games SET blackUsername = ? WHERE gameID = ?";
+        }
+        try{
+            var conn = DatabaseManager.getConnection();
+            var prepped = conn.prepareStatement(statement);
+            prepped.setInt(1, id);
         }
         catch (SQLException | DataAccessException e){
             System.out.println(e.getMessage());

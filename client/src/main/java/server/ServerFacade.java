@@ -8,6 +8,10 @@ import model.AuthDataModel;
 import model.GameDataModel;
 import model.JoinGameModel;
 import model.UserDataModel;
+import ui.websocket.WebSocketFacade;
+import webSocketMessages.userCommands.JoinObserverCommand;
+import webSocketMessages.userCommands.JoinPlayerCommand;
+import webSocketMessages.userCommands.UserGameCommand;
 
 import java.io.*;
 import java.net.*;
@@ -16,9 +20,19 @@ import java.util.ArrayList;
 public class ServerFacade {
     private final String serverUrl;
     private String authToken;
+    WebSocketFacade ws;
 
     public ServerFacade(String url) {
         serverUrl = url;
+    }
+
+
+    public void initWebSocket() {
+        try {
+            this.ws = new WebSocketFacade(serverUrl);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public AuthDataModel register(String username, String password, String email) throws Exception {
@@ -77,6 +91,25 @@ public class ServerFacade {
         var path = "/game";
         var data = new JoinGameModel(playerColor, gameID);
         this.makeRequest("PUT", path, data, null);
+        initWebSocket();
+        UserGameCommand command;
+        if (playerColor.isEmpty()){
+            command = new JoinObserverCommand(authToken, gameID, UserGameCommand.CommandType.JOIN_OBSERVER);
+        }
+        else{
+            if (playerColor.equals("WHITE")) {
+                command = new JoinPlayerCommand(authToken, gameID, ChessGame.TeamColor.WHITE);
+            }
+            else if (playerColor.equals("BLACK")){
+                command = new JoinPlayerCommand(authToken, gameID, ChessGame.TeamColor.BLACK);
+            }
+            else{
+                throw new Exception("player color bad");
+            }
+        }
+        Gson gson = new Gson();
+        String thing = gson.toJson(command);
+        ws.sendMessage(thing);
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {
