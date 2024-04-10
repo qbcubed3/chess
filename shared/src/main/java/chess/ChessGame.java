@@ -61,13 +61,6 @@ public class ChessGame {
         Collection<ChessMove> moveCollection = curPiece.pieceMoves(board, startPosition);
         Collection<ChessMove> validMoves = new HashSet<ChessMove>();
         for (ChessMove move: moveCollection){
-//            try{
-//                //makeMove(move);
-//            }
-//            catch (InvalidMoveException error){
-//                System.out.println(error.getMessage());
-//                continue;
-//            }
             ChessPiece movePiece = board.popPiece(move.getStartPosition());
             ChessPiece takenPiece = board.popPiece(move.getEndPosition());
             board.addPiece(move.getEndPosition(), movePiece);

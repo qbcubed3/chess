@@ -19,9 +19,6 @@ public class MemoryAuthDAO implements AuthDAO{
         usernames.put(auth.toString(), username);
         return auth.toString();
     }
-    public static HashMap<String, String> getData(){
-        return usernames;
-    }
 
     public static int length(){
         return usernames.size();
@@ -48,9 +45,5 @@ public class MemoryAuthDAO implements AuthDAO{
         else{
             throw new UnauthorizedException("authToken doesn't exist");
         }
-    }
-
-    public static void printAuths(){
-        System.out.println(usernames);
     }
 }

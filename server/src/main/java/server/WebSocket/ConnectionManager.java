@@ -16,10 +16,6 @@ public class ConnectionManager {
         connections.put(user, conn);
     }
 
-    public Connection getConn(String user) {
-        return connections.get(user);
-    }
-
     public void remove(String user){
         connections.remove(user);
     }
@@ -35,15 +31,4 @@ public class ConnectionManager {
             }
         }
     }
-
-//    public void broadcastOne(int id, ServerMessage message) throws IOException {
-//        System.out.println(connections);
-//        for (var c: connections.values()) {
-//            if (c.session.isOpen()) {
-//                if (c.user.equals(id)) {
-//                    c.send(message.toString());
-//                }
-//            }
-//        }
-//    }
 }
