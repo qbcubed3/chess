@@ -5,10 +5,7 @@ import chess.ChessGame;
 import chess.ChessMove;
 import chess.InvalidMoveException;
 import com.google.gson.Gson;
-import dataAccess.NullParameterException;
-import dataAccess.SQLAuthDAO;
-import dataAccess.UnauthorizedException;
-import dataAccess.UsernameTakenException;
+import dataAccess.*;
 import model.GameDataModel;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
@@ -25,11 +22,13 @@ import webSocketMessages.userCommands.MakeMoveCommand;
 import webSocketMessages.userCommands.UserGameCommand;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 @WebSocket
 public class WebSocketHandler {
     private final ConnectionManager connections = new ConnectionManager();
+    private HashMap<Integer, Boolean> goodGames = new HashMap<>();
 
     @OnWebSocketError
     public void onError(Session session, Throwable throwable) {
@@ -77,6 +76,9 @@ public class WebSocketHandler {
         var auth = command.getAuthString();
         var user = SQLAuthDAO.getUsername(auth);
         GameDataModel game = GameService.getGame(auth, gameId);
+        if (!goodGames.containsKey(gameId)){
+            goodGames.put(gameId, true);
+        }
         if (game.gameID() == 0){
             ErrorMessage message = new ErrorMessage("could not find the game");
             conn.send(message.toString());
@@ -90,6 +92,9 @@ public class WebSocketHandler {
 
     public void joinPlayer(JoinPlayerCommand command, Connection conn) throws IOException, UnauthorizedException {
         var gameId = command.getId();
+        if (!goodGames.containsKey(gameId)){
+            goodGames.put(gameId, true);
+        }
         var auth = command.getAuthString();
         var color = command.getColor();
         var user = SQLAuthDAO.getUsername(auth);
@@ -127,7 +132,12 @@ public class WebSocketHandler {
     public void makeMove(MakeMoveCommand command, Connection conn) throws IOException, UnauthorizedException {
         try {
             var user = SQLAuthDAO.getUsername(command.getAuthString());
-            var id = conn.id;
+            var id = command.getId();
+            if (!goodGames.get(id)){
+                ErrorMessage message = new ErrorMessage("game is already over");
+                conn.send(message.toString());
+                return;
+            }
             ChessMove move = command.getMove();
             GameDataModel game = GameService.getGame(command.getAuthString(), id);
             ChessGame chess = game.game();
@@ -153,6 +163,11 @@ public class WebSocketHandler {
             Notification notif = new Notification(user + " made a move");
             LoadMessage message = new LoadMessage(game.game());
             chess.makeMove(move);
+            SQLGameDAO.updateGame(chess, id);
+            if (chess.isInCheckmate(game.game().getTeamTurn()) || chess.isInCheckmate(game.game().getTeamTurn())){
+                notif = new Notification("game over");
+                goodGames.replace(id, false);
+            }
             conn.send(message.toString());
             connections.broadcast(user, id, message);
             connections.broadcast(user, id, notif);
@@ -173,8 +188,19 @@ public class WebSocketHandler {
     }
 
     public void resign(JoinObserverCommand command, Connection conn) throws IOException {
-        System.out.println("you lose dumbass");
-        var gameId = command.getId();
+        try {
+            var auth = command.getAuthString();
+            var user = SQLAuthDAO.getUsername(auth);
+            Notification notif = new Notification(user + " resigned");
+            var gameId = command.getId();
+            goodGames.replace(gameId, false);
+            conn.send(notif.toString());
+            connections.broadcast(user, gameId, notif);
+        }
+        catch (UnauthorizedException e){
+            ErrorMessage message = new ErrorMessage("unauthorized");
+            conn.send(message.toString());
+        }
     }
 
     public Connection makeConnection(String auth, int id, Session session) throws UnauthorizedException, IOException {
