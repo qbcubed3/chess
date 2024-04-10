@@ -77,7 +77,7 @@ public class WebSocketHandler {
         GameDataModel game = GameService.getGame(auth, gameId);
         ServerMessage message = new LoadMessage(game.game());
         conn.send(message.toString());
-        Notification notif = new Notification("Another guy joined the game yippee")
+        Notification notif = new Notification("Another guy joined the game yippee");
         connections.broadcast(user, gameId, message);
     }
 
