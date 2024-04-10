@@ -75,10 +75,15 @@ public class WebSocketHandler {
         var auth = command.getAuthString();
         var user = SQLAuthDAO.getUsername(auth);
         GameDataModel game = GameService.getGame(auth, gameId);
+        if (game.gameID() == 0){
+            ErrorMessage message = new ErrorMessage("could not find the game");
+            conn.send(message.toString());
+            return;
+        }
         ServerMessage message = new LoadMessage(game.game());
         conn.send(message.toString());
         Notification notif = new Notification("Another guy joined the game yippee");
-        connections.broadcast(user, gameId, message);
+        connections.broadcast(user, gameId, notif);
     }
 
     public void joinPlayer(JoinPlayerCommand command, Connection conn) throws IOException, UnauthorizedException {
