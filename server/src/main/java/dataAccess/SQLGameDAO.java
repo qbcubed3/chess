@@ -1,5 +1,6 @@
 package dataAccess;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameDataModel;
@@ -46,6 +47,27 @@ public class SQLGameDAO {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void updateGame(ChessGame game, int gameId){
+        try{
+            configureDatabase();;
+        }
+        catch (Exception e){System.out.println(e.getMessage());}
+        try{
+            var statement = "UPDATE games SET game = ? WHERE gameID = ?";
+            var conn = DatabaseManager.getConnection();
+            var preparedStatement = conn.prepareStatement(statement);
+            Gson gson = new Gson();
+            String jsonGame = gson.toJson(game);
+            preparedStatement.setString(1, jsonGame);
+            preparedStatement.setInt(2, gameId);
+            preparedStatement.executeUpdate();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static ArrayList<GameDataModel> getGames(){
         try{
             configureDatabase();
@@ -111,9 +133,13 @@ public class SQLGameDAO {
         catch(Exception e){System.out.println(e.getMessage());}
         var statement = "INSERT INTO games (whiteUsername, blackUsername, gameName, game) VALUES(?,?,?,?)";
         ChessGame game = new ChessGame();
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        game.setBoard(board);
         Gson gson = new Gson();
         int id = 0;
         var jsonGame = gson.toJson(game);
+        System.out.println("json: " + jsonGame);
         try{
             var conn = DatabaseManager.getConnection();
             var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);

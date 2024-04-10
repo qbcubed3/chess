@@ -1,7 +1,9 @@
 package server.WebSocket;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataAccess.NullParameterException;
 import dataAccess.SQLAuthDAO;
@@ -122,10 +124,47 @@ public class WebSocketHandler {
         connections.broadcast(user, gameId, notif);
     }
 
-    public void makeMove(MakeMoveCommand command, Connection conn) throws IOException {
-        System.out.println("making a move");
-        ChessMove move = command.getMove();
-
+    public void makeMove(MakeMoveCommand command, Connection conn) throws IOException, UnauthorizedException {
+        try {
+            var user = SQLAuthDAO.getUsername(command.getAuthString());
+            var id = conn.id;
+            ChessMove move = command.getMove();
+            GameDataModel game = GameService.getGame(command.getAuthString(), id);
+            ChessGame chess = game.game();
+            if (chess.getBoard().equals(new ChessBoard())){
+                ChessBoard board = new ChessBoard();
+                board.resetBoard();
+                chess.setBoard(board);
+            }
+            if (chess.getTeamTurn() == ChessGame.TeamColor.BLACK){
+                if (!(user.equals(game.blackUsername()))){
+                    ErrorMessage message = new ErrorMessage("not your turn");
+                    conn.send(message.toString());
+                    return;
+                }
+            }
+            else if (chess.getTeamTurn() == ChessGame.TeamColor.WHITE){
+                if (!(user.equals(game.whiteUsername()))){
+                    ErrorMessage message = new ErrorMessage("not your turn");
+                    conn.send(message.toString());
+                    return;
+                }
+            }
+            Notification notif = new Notification(user + " made a move");
+            LoadMessage message = new LoadMessage(game.game());
+            chess.makeMove(move);
+            conn.send(message.toString());
+            connections.broadcast(user, id, message);
+            connections.broadcast(user, id, notif);
+        }
+        catch (UnauthorizedException e) {
+            ErrorMessage message = new ErrorMessage("unauthorized");
+            conn.send(message.toString());
+        }
+        catch (InvalidMoveException e){
+            ErrorMessage message = new ErrorMessage("invalid move");
+            conn.send(message.toString());
+        }
     }
 
     public void leave(JoinObserverCommand command, Connection conn) throws IOException {
