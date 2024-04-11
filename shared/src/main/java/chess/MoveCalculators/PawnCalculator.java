@@ -86,10 +86,12 @@ public class PawnCalculator implements MoveCalculator{
                 //adds the moves and adds all the promotion pieces if promoting
                 if (validMove) {
                     if (promotion) {
-                        moveCollection.add(new ChessMove(position, currentPosition, PieceType.QUEEN));
-                        moveCollection.add(new ChessMove(position, currentPosition, PieceType.ROOK));
-                        moveCollection.add(new ChessMove(position, currentPosition, PieceType.BISHOP));
-                        moveCollection.add(new ChessMove(position, currentPosition, PieceType.KNIGHT));
+                        for (PieceType type: PieceType.values()) {
+                            if (type == PieceType.PAWN || type == PieceType.KING) {
+                                continue;
+                            }
+                            moveCollection.add(new ChessMove(position, currentPosition, type));
+                        }
                     } else {
                         moveCollection.add(new ChessMove(position, currentPosition, null));
                     }
