@@ -16,60 +16,51 @@ public class BishopCalculator implements MoveCalculator {
         int row = position.getRow() + 1;
         int column = position.getColumn() + 1;
         //looks for moves in the upper right path
-        for (int i = row; i < 9; i++){
-            if(column > 8) {
+        for (int j = row; j < 9; j++){
+            if(column > 8) {break;}
+            else if(board.getPiece(new ChessPosition(j, column)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(j, column), null));
+            }
+            else if(board.getPiece(new ChessPosition(j, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(j, column), null));
                 break;
-            }
-            else if(board.getPiece(new ChessPosition(i, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
-            }
-            else if(board.getPiece(new ChessPosition(i, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
-                break;
-            }
-            else {
-                break;
-            }
+            } else {break;}
             column += 1;
         }
 
         //looks for moves in the upper left path
-        column = position.getColumn() - 1;
+        var col = position.getColumn() - 1;
         for (int i = row; i < 9; i++){
-            if(column < 1) {
+            if(col < 1) {break;}
+            else if(board.getPiece(new ChessPosition(i, col)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, col), null));
+            }
+            else if(board.getPiece(new ChessPosition(i, col)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, col), null));
                 break;
             }
-            else if(board.getPiece(new ChessPosition(i, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
-            }
-            else if(board.getPiece(new ChessPosition(i, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
-                break;
-            }
-            else {
-                break;
-            }
-            column -= 1;
+            else {break;}
+            col -= 1;
         }
 
         //looks for moves in the lower right section
-        column = position.getColumn() - 1;
+        col = position.getColumn() - 1;
         row -= 2;
         for (int i = row; i > 0; i--){
-            if(column < 1) {
+            if(col < 1) {
                 break;
             }
-            else if(board.getPiece(new ChessPosition(i, column)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+            else if(board.getPiece(new ChessPosition(i, col)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, col), null));
             }
-            else if(board.getPiece(new ChessPosition(i, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, column), null));
+            else if(board.getPiece(new ChessPosition(i, col)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(i, col), null));
                 break;
             }
             else {
                 break;
             }
-            column -= 1;
+            col -= 1;
         }
 
         //looks for moves in the lower left section
