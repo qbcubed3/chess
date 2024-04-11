@@ -44,23 +44,23 @@ public class BishopCalculator implements MoveCalculator {
         }
 
         //looks for moves in the lower right section
-        col = position.getColumn() - 1;
+        column = position.getColumn() - 1;
         row -= 2;
-        for (int i = row; i > 0; i--){
-            if(col < 1) {
+        for (int j = row; j > 0; j--){
+            if(column < 1) {
                 break;
             }
-            else if(board.getPiece(new ChessPosition(i, col)) == null) {
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, col), null));
+            else if(board.getPiece(new ChessPosition(j, column)) == null) {
+                moveCollection.add(new ChessMove(position, new ChessPosition(j, column), null));
             }
-            else if(board.getPiece(new ChessPosition(i, col)).getTeamColor() != board.getPiece(position).getTeamColor()){
-                moveCollection.add(new ChessMove(position, new ChessPosition(i, col), null));
+            else if(board.getPiece(new ChessPosition(j, column)).getTeamColor() != board.getPiece(position).getTeamColor()){
+                moveCollection.add(new ChessMove(position, new ChessPosition(j, column), null));
                 break;
             }
             else {
                 break;
             }
-            col -= 1;
+            column -= 1;
         }
 
         //looks for moves in the lower left section
