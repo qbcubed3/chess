@@ -16,10 +16,10 @@ public class SQLUserDAO {
 
     private static void configureDatabase() throws Exception {
         DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
+        try (var connection = DatabaseManager.getConnection()) {
+            for (var statem : createStatements) {
+                try (var prep = connection.prepareStatement(statem)) {
+                    prep.executeUpdate();
                 }
             }
         } catch (SQLException ex) {

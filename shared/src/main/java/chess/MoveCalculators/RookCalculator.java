@@ -29,17 +29,14 @@ public class RookCalculator implements MoveCalculator{
             }
         }
         //gets all the moves that are on the lower column
-        for (int i = row - 1; i > 0; i--){
-            ChessPosition curPosition = new ChessPosition(i, column);
-            if (board.getPiece(curPosition) == null){
-                moveCollection.add(new ChessMove(position, curPosition, null));
-            }
+        for (int j = row - 1; j > 0; j--){
+            ChessPosition cur = new ChessPosition(j, column);
+            if (board.getPiece(cur) == null){moveCollection.add(new ChessMove(position, cur, null));}
             else{
-                if (board.getPiece(curPosition).getTeamColor() != currentPiece.getTeamColor()){
-                    moveCollection.add(new ChessMove(position, curPosition, null));
+                if (board.getPiece(cur).getTeamColor() != currentPiece.getTeamColor()){
+                    moveCollection.add(new ChessMove(position, cur, null));
                 }
-                break;
-            }
+                break;}
         }
         //gets all the moves that are on the lower row
         for (int i = column - 1; i > 0; i--){
@@ -56,13 +53,13 @@ public class RookCalculator implements MoveCalculator{
         }
         //gets all the moves that are on the upper row
         for (int i = column + 1; i < 9; i++){
-            ChessPosition curPosition = new ChessPosition(row, i);
-            if (board.getPiece(curPosition) == null){
-                moveCollection.add(new ChessMove(position, curPosition, null));
+            ChessPosition cur = new ChessPosition(row, i);
+            if (board.getPiece(cur) == null){
+                moveCollection.add(new ChessMove(position, cur, null));
             }
             else{
-                if (board.getPiece(curPosition).getTeamColor() != currentPiece.getTeamColor()){
-                    moveCollection.add(new ChessMove(position, curPosition, null));
+                if (board.getPiece(cur).getTeamColor() != currentPiece.getTeamColor()){
+                    moveCollection.add(new ChessMove(position, cur, null));
                 }
                 break;
             }

@@ -35,13 +35,15 @@ public class KnightCalculator implements MoveCalculator{
             if (i < 1 || i > 8) {
                 continue;
             }
-            for (int j = column - 2; j < column + 3; j += 4) {
-                if (j < 1 || j > 8){
+            for (int k = column - 2; k < column + 3; k += 4) {
+                if (k < 1 || k > 8){
                     continue;
                 }
-                ChessPosition curPosition = new ChessPosition(i, j);
-                if (board.getPiece(curPosition) == (null) || board.getPiece(curPosition).getTeamColor() != currentPiece.getTeamColor()) {
-                    moveCollection.add(new ChessMove(position, curPosition, null));
+                else {
+                    ChessPosition cur = new ChessPosition(i, k);
+                    if (board.getPiece(cur) == (null) || board.getPiece(cur).getTeamColor() != currentPiece.getTeamColor()) {
+                        moveCollection.add(new ChessMove(position, cur, null));
+                    }
                 }
             }
         }

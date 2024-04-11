@@ -14,10 +14,10 @@ public class SQLAuthDAO {
     };
     private static void configureDatabase() throws Exception {
         DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
+        try (var con = DatabaseManager.getConnection()) {
+            for (var state : createStatements) {
+                try (var prepared = con.prepareStatement(state)) {
+                    prepared.executeUpdate();
                 }
             }
         } catch (SQLException ex) {
