@@ -71,7 +71,6 @@ public class WebSocketHandler {
     }
 
     public void joinObserver(JoinObserverCommand command, Connection conn) throws IOException, NullParameterException, UnauthorizedException, UsernameTakenException {
-        System.out.println("joining observer");
         var gameId = command.getId();
         var auth = command.getAuthString();
         var user = SQLAuthDAO.getUsername(auth);
@@ -86,7 +85,7 @@ public class WebSocketHandler {
         }
         ServerMessage message = new LoadMessage(game.game());
         conn.send(message.toString());
-        Notification notif = new Notification("Another guy joined the game yippee");
+        Notification notif = new Notification(user + " joined the game as an observer");
         connections.broadcast(user, gameId, notif);
     }
 
@@ -125,7 +124,13 @@ public class WebSocketHandler {
         }
         LoadMessage message = new LoadMessage(game.game());
         conn.send(message.toString());
-        Notification notif = new Notification("Dude joined the game");
+        Notification notif;
+        if (color.equals(ChessGame.TeamColor.BLACK)) {
+            notif = new Notification(user + " joined the game as black");
+        }
+        else{
+            notif = new Notification(user + " joined the game as white");
+        }
         connections.broadcast(user, gameId, notif);
     }
 
@@ -194,8 +199,7 @@ public class WebSocketHandler {
             else if (user.equals(game.whiteUsername())){
                 SQLGameDAO.updateUser(gameId, ChessGame.TeamColor.WHITE);
             }
-            Notification notif = new Notification("player left the game");
-            conn.send(notif.toString());
+            Notification notif = new Notification(user +  " left the game\n");
             connections.broadcast(user, gameId, notif);
             connections.remove(user);
         }

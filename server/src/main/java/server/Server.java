@@ -8,12 +8,14 @@ import spark.*;
 
 import java.net.http.WebSocket;
 
+import static spark.Spark.webSocket;
+
 public class Server {
     public int run(int desiredPort){
         Spark.port(desiredPort);
         Spark.staticFiles.location("/web");
 
-        Spark.webSocket("/connect", new WebSocketHandler());
+        webSocket("/connect", WebSocketHandler.class);
 
         Spark.delete("/db", ClearServiceHandler::callClearService);
         Spark.post("/user", UserServiceHandler::callRegisterService);

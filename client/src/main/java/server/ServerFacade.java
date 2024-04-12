@@ -27,20 +27,16 @@ public class ServerFacade {
     }
 
 
-    public void initWebSocket() {
-        try {
-            this.ws = new WebSocketFacade(serverUrl);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
     public AuthDataModel register(String username, String password, String email) throws Exception {
         var path = "/user";
         var user = new UserDataModel(username, password, email);
         var auth = this.makeRequest("POST", path, user, AuthDataModel.class);
         this.authToken = auth.authToken();
         return auth;
+    }
+
+    public String getHost(){
+        return serverUrl;
     }
 
     public AuthDataModel login(String username, String password) throws Exception{
@@ -55,6 +51,7 @@ public class ServerFacade {
         var path = "/session";
         var auth = this.makeRequest("DELETE", path, null, AuthDataModel.class);
         if (authToken != null){authToken = null;}
+
         return auth;
     }
     public ArrayList<GameDataModel> list() throws Exception {
@@ -91,25 +88,6 @@ public class ServerFacade {
         var path = "/game";
         var data = new JoinGameModel(playerColor, gameID);
         this.makeRequest("PUT", path, data, null);
-        initWebSocket();
-        UserGameCommand command;
-        if (playerColor.isEmpty()){
-            command = new JoinObserverCommand(authToken, gameID, UserGameCommand.CommandType.JOIN_OBSERVER);
-        }
-        else{
-            if (playerColor.equals("WHITE")) {
-                command = new JoinPlayerCommand(authToken, gameID, ChessGame.TeamColor.WHITE);
-            }
-            else if (playerColor.equals("BLACK")){
-                command = new JoinPlayerCommand(authToken, gameID, ChessGame.TeamColor.BLACK);
-            }
-            else{
-                throw new Exception("player color bad");
-            }
-        }
-        Gson gson = new Gson();
-        String thing = gson.toJson(command);
-        ws.sendMessage(thing);
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception {

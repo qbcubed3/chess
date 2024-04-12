@@ -1,17 +1,34 @@
 package ui;
 
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
+import com.google.gson.Gson;
+import model.AuthDataModel;
 import model.GameDataModel;
 import server.ServerFacade;
+import ui.websocket.NotificationHandler;
+import ui.websocket.WebSocketFacade;
+import webSocketMessages.userCommands.JoinObserverCommand;
+import webSocketMessages.userCommands.JoinPlayerCommand;
+import webSocketMessages.userCommands.UserGameCommand;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
 
-public class ChessTerminalUI {
+public class ChessTerminalUI implements NotificationHandler {
     public ServerFacade facade;
-    public ChessTerminalUI(ServerFacade facade) {
-        this.facade = facade;
+    public WebSocketFacade ws;
+    private String auth;
+    private int id;
+    String user;
+    String color;
+    public ChessTerminalUI(String url) throws Exception {
+        this.facade = new ServerFacade(url);
+        this.ws = new WebSocketFacade(url, this);
     }
 
     public void runUI(){
@@ -47,7 +64,9 @@ public class ChessTerminalUI {
                 String password = inputs[2];
                 String email = inputs[3];
                 try{
-                    facade.register(username, password, email);
+
+                    AuthDataModel model = facade.register(username, password, email);
+                    auth = model.authToken();
                     System.out.println(username + " is now registered and logged in.");
                     postLogin();
                     break;
@@ -64,7 +83,9 @@ public class ChessTerminalUI {
                 String username = inputs[1];
                 String password = inputs[2];
                 try{
-                    facade.login(username, password);
+                    user = inputs[1];
+                    AuthDataModel model = facade.login(username, password);
+                    auth = model.authToken();
                     System.out.println(username + " is now logged in");
                     postLogin();
                     break;
@@ -95,6 +116,9 @@ public class ChessTerminalUI {
                 System.out.println("join game: joins a chess game. Format is \"join game <PLAYER COLOR> <GAME ID>\". <PLAYER COLOR> can be BLACK, WHITE, or blank");
                 System.out.println("list games: lists the current chess games");
                 System.out.println("quit: quits the chess program");
+                System.out.println("leave: allows the user to leave the game");
+                System.out.println("resign: resigns the game for the user");
+                System.out.println("redraw: redraws the board");
             }
             else if (inputs[0].equals("logout")) {
                 try{
@@ -123,22 +147,41 @@ public class ChessTerminalUI {
             else if (inputs[0].equals("join") && inputs[1].equals("game")){
                 if (inputs.length == 3){
                     try{
+                        id = Integer.parseInt(inputs[2]);
                         facade.join("", Integer.parseInt(inputs[2]));
                         System.out.println("joined gameID: " + inputs[2] + " as a spectator");
-                        gameplay();
+                        JoinObserverCommand command = new JoinObserverCommand(auth, Integer.parseInt(inputs[2]), UserGameCommand.CommandType.JOIN_OBSERVER);
+                        Gson gson = new Gson();
+                        String json = gson.toJson(command);
+                        ws.sendMessage(json);
                     }
                     catch (Exception e) {
-                        System.out.println("There was an error. Check the inputs and try again.");
+                        System.out.println(e.getMessage());
                     }
                 }
                 else if (inputs.length == 4){
                     try{
+                        id = Integer.parseInt(inputs[3]);
                         facade.join(inputs[2], Integer.parseInt(inputs[3]));
                         System.out.println("joined gameID: " + inputs[3] + " as " + inputs[2]);
-                        gameplay();
+                        JoinPlayerCommand command;
+                        if (inputs[2].equals("BLACK")){
+                            color = "BLACK";
+                            command = new JoinPlayerCommand(auth, Integer.parseInt(inputs[3]), ChessGame.TeamColor.BLACK);
+                        }
+                        else if (inputs[2].equals("WHITE")){
+                            color = "WHITE";
+                            command = new JoinPlayerCommand(auth, Integer.parseInt(inputs[3]), ChessGame.TeamColor.WHITE);
+                        }
+                        else{
+                            throw new Exception("Color must be WHITE or BLACK or blank");
+                        }
+                        Gson gson = new Gson();
+                        String json = gson.toJson(command);
+                        ws.sendMessage(json);
                     }
                     catch (Exception e) {
-                        System.out.println("There was an error. Check the inputs and try again.");
+                        System.out.println(e.getMessage());
                     }
                 }
                 else{
@@ -161,6 +204,17 @@ public class ChessTerminalUI {
             else if (input.equals("quit")) {
                 System.out.println("quitting");
                 break;
+            }
+            else if (inputs[0].equals("leave")){
+                try {
+                    JoinObserverCommand command = new JoinObserverCommand(auth, id, UserGameCommand.CommandType.LEAVE);
+                    Gson gson = new Gson();
+                    var json = gson.toJson(command);
+                    ws.sendMessage(json);
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
             }
             else{
                 System.out.println("could not understand the command");
@@ -212,7 +266,7 @@ public class ChessTerminalUI {
                 + "|" + WHITE_KING + "|" + WHITE_BISHOP + "|" + WHITE_KNIGHT + "|" + WHITE_ROOK + "|");
     }
 
-    public void gameplay(){
+    public void gameplay(ChessBoard board){
         while (true){
             printChessboard();
             System.out.print(">>>");
@@ -235,5 +289,74 @@ public class ChessTerminalUI {
             }
         }
     }
+
+    public void drawBoard(ChessBoard board) {
+        var bottom = 1;
+        var top = 9;
+        var increment = 1;
+        if (color != null) {
+            if (color.equals("BLACK")) {
+                bottom = 8;
+                top = 0;
+                increment = -1;
+            }
+        }
+        System.out.println();
+        for (int i = bottom; i != top; i+=increment){
+            for (int j = 1; j < 9; j++){
+                ChessPosition position = new ChessPosition(i, j);
+                ChessPiece curPiece = board.getPiece(position);
+                if (curPiece == null){
+                    System.out.print("| \u2001\u2005\u200A ");
+                }
+
+                else{
+                    if (curPiece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        switch (curPiece.getPieceType()) {
+                            case KING -> System.out.print("|" + BLACK_KING);
+                            case PAWN -> System.out.print("|" + BLACK_PAWN);
+                            case ROOK -> System.out.print("|" + BLACK_ROOK);
+                            case QUEEN -> System.out.print("|" + BLACK_QUEEN);
+                            case BISHOP -> System.out.print("|" + BLACK_BISHOP);
+                            case KNIGHT -> System.out.print("|" + BLACK_KNIGHT);
+                        }
+                    }
+                    if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        switch (curPiece.getPieceType()) {
+                            case KING -> System.out.print("|" + WHITE_KING);
+                            case PAWN -> System.out.print("|" + WHITE_PAWN);
+                            case ROOK -> System.out.print("|" + WHITE_ROOK);
+                            case QUEEN -> System.out.print("|" + WHITE_QUEEN);
+                            case BISHOP -> System.out.print("|" + WHITE_BISHOP);
+                            case KNIGHT -> System.out.print("|" + WHITE_KNIGHT);
+                        }
+                    }
+                }
+            }
+            System.out.println("|");
+        }
+    }
+
+    public void error(String error){
+        System.out.println(error);
+    }
+
+    public void notif(String message){
+        System.out.println(message);
+    }
+
+    public void draw(ChessGame game){
+        if (game.getBoard().equals(new ChessBoard())){
+            var board = new ChessBoard();
+            board.resetBoard();
+            drawBoard(board);
+        }
+        else{
+            drawBoard(game.getBoard());
+        }
+    }
+
+
+
 
 }
